@@ -21,7 +21,7 @@ export function validateBlocks(blocks) {
     if (b.text.length > 50000) fail(400, 'Um bloco pode ter até 50 000 caracteres.');
     if (b.type === 'task' && typeof b.done !== 'boolean') fail(400, 'Estado de tarefa inválido.');
     size += b.text.length; ids.add(b.id);
-    return { id: b.id, type: b.type, text: b.text, ...(b.type === 'task' ? { done: b.done } : {}) };
+    return { id: b.id, type: b.type, text: b.text, ...(b.type === 'task' ? { done: b.done } : {}), ...(b.inline === true ? { inline: true } : {}) };
   });
   if (size > 400000) fail(400, 'Esta página atingiu o limite de texto.');
   return clean;

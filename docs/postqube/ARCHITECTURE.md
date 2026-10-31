@@ -23,3 +23,9 @@ The original Postqube Ideas module runs separately on Node with SQLite, behind
 Every request uses native session/workspace verification; no second identity system
 or signing secret is introduced. Revision checks protect simultaneous edits. See
 [Ideas](IDEAS.md) for team access, recovery and deletion limitations.
+
+Ideas opens within the actual native layout at /launches?view=ideas. Its editor
+frame (/ideas/editor/) occupies the content slot; native navigation, workspace
+selector, theme, language and notifications remain mounted. The surface inherits
+real theme variables and self-hosted font faces, instead of maintaining copied
+chrome. Host selectors are covered by browser regression checks after upgrades.

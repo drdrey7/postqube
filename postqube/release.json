@@ -1,5 +1,5 @@
 {
-  "version": "postqube-0.2.0-beta.1",
+  "version": "postqube-0.2.0-beta.2",
   "upstream": "gitroomhq/postiz-app",
   "upstreamTag": "v2.25.3",
   "upstreamCommit": "a5affe62c74e39c1e7ac960d50d8418b807d532c",

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { IdeasStore, IdeasError } from './store.mjs';
 const PUBLIC = fileURLToPath(new URL('./public/', import.meta.url));
-const FILES = { '/ideas/': ['index.html', 'text/html; charset=utf-8'], '/ideas/app.js': ['app.js', 'text/javascript; charset=utf-8'], '/ideas/style.css': ['style.css', 'text/css; charset=utf-8'] };
+const FILES = { '/ideas/editor/': ['index.html', 'text/html; charset=utf-8'], '/ideas/app.js': ['app.js', 'text/javascript; charset=utf-8'], '/ideas/style.css': ['style.css', 'text/css; charset=utf-8'] };
 const security = { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'same-origin', 'X-Frame-Options': 'SAMEORIGIN', 'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'self'; base-uri 'none'; form-action 'self'" };
 function json(res, status, body) { res.writeHead(status, { ...security, 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(body)); }
 async function body(req) {
@@ -35,7 +35,7 @@ export function createIdeasServer({ store, authenticate, origin }) {
     try {
       const url = new URL(req.url, origin), route = url.pathname, method = req.method;
       if (route === '/healthz' && method === 'GET') return json(res, 200, { ok: true });
-      if (route === '/ideas' && method === 'GET') { res.writeHead(308, { ...security, Location: '/ideas/' }); return res.end(); }
+      if (['/ideas', '/ideas/'].includes(route) && method === 'GET') { res.writeHead(308, { ...security, Location: '/launches?view=ideas' }); return res.end(); }
       if (FILES[route] && method === 'GET') {
         const [name, mime] = FILES[route]; res.writeHead(200, { ...security, 'Content-Type': mime }); return res.end(await readFile(path.join(PUBLIC, name)));
       }

@@ -7,46 +7,44 @@
 </head>
 <body data-view="folders">
 <a class="skip" href="#editor">Ir para a página</a>
-<header class="app-header">
-  <a class="brand" href="/launches" aria-label="Postqube — calendário"><img src="/postqube/mark.svg" alt="" width="32" height="32"><span>Postqube</span></a>
-  <nav class="top-nav" aria-label="Aplicação"><a href="/launches">Calendário</a><a href="/ideas/" aria-current="page">Ideias</a></nav>
-  <div class="workspace-tag"><span class="team-icon" aria-hidden="true">◉</span> Espaço de trabalho <a href="/settings?tab=teams" title="Gerir membros da equipa" aria-label="Gerir membros da equipa">Equipa ↗</a></div>
-</header>
 <main class="workspace" aria-label="Ideias do espaço de trabalho">
-  <section class="panel folders-panel" aria-labelledby="folders-title">
-    <div class="panel-heading"><div><span class="eyebrow">A TUA BIBLIOTECA</span><h1 id="folders-title">Ideias<span class="tiny-dot"></span></h1></div><button class="icon-button add" data-create="folders" title="Nova pasta" aria-label="Nova pasta">+</button></div>
-    <div class="panel-caption">Um lugar para o próximo post.</div>
+  <section data-column="folders" class="panel folders-panel" aria-labelledby="folders-title">
+    <div class="panel-heading"><div><span class="eyebrow">BIBLIOTECA</span><h1 id="folders-title">Pastas</h1></div><button class="icon-button add" data-create="folders" title="Nova pasta" aria-label="Nova pasta">+</button></div>
+    <div class="panel-caption">As ideias da tua equipa.</div>
+    <button class="collapse-column" data-collapse="folders" aria-expanded="true" aria-label="Minimizar pastas" title="Minimizar pastas">‹<span>Pastas</span></button>
     <div class="list" id="folders-list" aria-label="Pastas"></div>
-    <div class="panel-bottom"><button class="subtle-button" id="trash-button"><span aria-hidden="true">♲</span> Lixo <span id="trash-count"></span></button><p>Partilhado com a tua equipa.<br>Guardado no Postqube.</p><a class="source-link" href="https://github.com/drdrey7/postqube/tree/postqube-0.2.0-beta.1" target="_blank" rel="noopener">Código · AGPL-3.0 ↗</a></div>
+    <div class="panel-bottom"><button class="subtle-button" id="trash-button"><span aria-hidden="true">♲</span> Lixo <span id="trash-count"></span></button><p>Partilhado com a tua equipa.<br>Guardado no Postqube.</p><a class="source-link" href="https://github.com/drdrey7/postqube/tree/postqube-0.2.0-beta.2" target="_blank" rel="noopener">Código · AGPL-3.0 ↗</a></div>
   </section>
-  <section class="panel sections-panel" aria-labelledby="sections-title">
-    <div class="column-top"><div><span class="eyebrow">01 / ORGANIZAR</span><h2 id="sections-title">Separadores</h2></div><button class="icon-button" data-create="sections" title="Novo separador" aria-label="Novo separador">+</button></div>
+  <section data-column="sections" class="panel sections-panel" aria-labelledby="sections-title">
+    <div class="column-top"><div><span class="eyebrow">ORGANIZAR</span><h2 id="sections-title">Separadores</h2></div><button class="icon-button" data-create="sections" title="Novo separador" aria-label="Novo separador">+</button></div>
     <div class="context-label" id="folder-context">Escolhe uma pasta</div>
+    <button class="collapse-column" data-collapse="sections" aria-expanded="true" aria-label="Minimizar separadores" title="Minimizar separadores">‹<span>Separadores</span></button>
     <div class="list" id="sections-list" aria-label="Separadores"></div>
     <button class="bottom-create" data-create="sections">+ Novo separador</button>
   </section>
-  <section class="panel pages-panel" aria-labelledby="pages-title">
-    <div class="column-top"><div><span class="eyebrow">02 / DESENVOLVER</span><h2 id="pages-title">Páginas <span class="count" id="pages-count">0</span></h2></div><button class="icon-button" data-create="pages" title="Nova página" aria-label="Nova página">+</button></div>
+  <section data-column="pages" class="panel pages-panel" aria-labelledby="pages-title">
+    <div class="column-top"><div><span class="eyebrow">DESENVOLVER</span><h2 id="pages-title">Páginas <span class="count" id="pages-count">0</span></h2></div><button class="icon-button" data-create="pages" title="Nova página" aria-label="Nova página">+</button></div>
     <label class="search"><span aria-hidden="true">⌕</span><input id="page-search" type="search" placeholder="Pesquisar páginas…" aria-label="Pesquisar páginas neste separador"></label>
+    <button class="collapse-column" data-collapse="pages" aria-expanded="true" aria-label="Minimizar páginas" title="Minimizar páginas">‹<span>Páginas</span></button>
     <div class="list" id="pages-list" aria-label="Páginas"></div>
     <button class="bottom-create" data-create="pages">+ Nova página</button>
   </section>
   <section class="editor-panel" id="editor" aria-label="Editor da página" tabindex="-1">
     <div class="editor-top"><div class="breadcrumbs" id="breadcrumbs">Ideias / A tua próxima ideia</div><div class="save-status" id="save-status" role="status" aria-live="polite"><span></span>A ligar…</div></div>
     <nav class="mobile-steps" aria-label="Navegar nas ideias"><button data-view="folders">Pastas</button><button data-view="sections">Separadores</button><button data-view="pages">Páginas</button><button data-view="editor">Nota</button></nav>
-    <div class="note-toolbar" id="note-toolbar" hidden><div class="toolbar-group"><button id="add-text" class="toolbar-button"><span class="text-icon" aria-hidden="true">T</span> Texto</button><button id="add-task" class="toolbar-button"><span class="task-icon" aria-hidden="true"></span> Tarefa</button></div><span class="toolbar-hint">Uma ideia de cada vez.</span><button id="note-menu" class="icon-button" aria-label="Opções da página" title="Opções da página">⋯</button></div>
+    <div class="note-toolbar" id="note-toolbar" hidden><div class="toolbar-group"><button id="add-text" class="toolbar-button"><span class="text-icon" aria-hidden="true">T</span> Texto normal</button><button id="add-task" class="toolbar-button"><span class="task-icon" aria-hidden="true"></span> Tarefa</button></div><span class="toolbar-hint">Escreve. Organiza. Cria.</span><button id="note-menu" class="icon-button" aria-label="Opções da página" title="Opções da página">⋯</button></div>
     <div id="conflict-banner" class="conflict-banner" hidden role="alert"><strong>Outro membro atualizou esta página.</strong><p>O teu texto continua aqui. Copia-o antes de abrir a versão mais recente, ou guarda-o numa nova página.</p><button id="conflict-copy">Copiar o meu texto</button><button id="conflict-save-copy">Guardar como nova página</button><button id="conflict-reload">Abrir versão recente</button></div>
     <div class="editor-scroll" id="editor-scroll">
       <div class="empty-editor" id="empty-editor"><div class="empty-mark" aria-hidden="true">✧</div><span class="eyebrow">ESPAÇO PARA PENSAR</span><h2>As boas ideias<br>começam aqui.</h2><p>Cria uma pasta, organiza os separadores<br>e dá espaço à tua próxima publicação.</p><button class="primary-button" id="start-button">+ Criar a primeira pasta</button><div class="empty-flow"><span>Pastas</span><b>›</b><span>Separadores</span><b>›</b><span>Páginas</span></div></div>
-      <article class="note" id="note" hidden><div class="note-meta"><span class="note-kicker">IDEIA EM CONSTRUÇÃO</span><span id="note-date"></span></div><label class="sr-only" for="note-title">Título da página</label><textarea id="note-title" class="note-title" rows="1" maxlength="160" placeholder="Sem título" autocomplete="off"></textarea><div class="note-rule"></div><div id="blocks" aria-label="Texto e tarefas"></div><button class="add-inline" id="append-block">+ Continuar a escrever</button></article>
+      <article class="note" id="note" hidden><div class="note-meta"><span class="note-kicker">IDEIA EM CONSTRUÇÃO</span><span id="note-date"></span></div><label class="sr-only" for="note-title">Título da página</label><textarea id="note-title" class="note-title" rows="1" maxlength="160" placeholder="Sem título" autocomplete="off"></textarea><div class="note-rule"></div><div id="blocks" class="continuous-editor" contenteditable="true" role="textbox" aria-label="Texto da nota" aria-multiline="true" spellcheck="true" data-placeholder="Escreve a tua ideia…"></div></article>
     </div>
     <div class="note-footer"><span id="note-stats">Ideias partilhadas. Possibilidades infinitas.</span><span id="save-detail">Só os membros deste espaço têm acesso.</span><button id="retry-save" hidden>Tentar guardar</button></div>
   </section>
 </main>
 <nav class="mobile-navigation" aria-label="Níveis das ideias"><button data-view="folders">Pastas</button><button data-view="sections">Separadores</button><button data-view="pages">Páginas</button><button data-view="editor">Página</button></nav>
 <div id="toast" role="status" aria-live="polite" hidden></div>
-<div class="session-gate" id="session-gate" hidden><img src="/postqube/mark.svg" alt="" width="48" height="48"><h1>As tuas ideias estão guardadas.</h1><p>Entra no Postqube para abrir o teu espaço de trabalho.</p><a class="primary-button" href="/auth/login">Entrar no Postqube</a><button id="session-retry" class="subtle-button">Já entrei — tentar novamente</button></div>
-<dialog id="name-dialog"><form id="name-form"><button type="button" class="dialog-close" aria-label="Fechar">×</button><span class="eyebrow">A TUA BIBLIOTECA</span><h2 id="name-heading">Nova pasta</h2><label for="name-input">Nome</label><input id="name-input" maxlength="160" required autocomplete="off"><p id="name-error" role="alert"></p><div class="dialog-actions"><button type="button" class="secondary-button dialog-cancel">Cancelar</button><button type="submit" class="primary-button" id="name-submit">Criar</button></div></form></dialog>
+<div class="session-gate" id="session-gate" hidden><img src="/postqube/mark.svg" alt="" width="48" height="48"><h1>As tuas ideias estão guardadas.</h1><p>Entra no Postqube para abrir o teu espaço de trabalho.</p><a class="primary-button" href="/auth/login" target="_top">Entrar no Postqube</a><button id="session-retry" class="subtle-button">Já entrei — tentar novamente</button></div>
+<dialog id="name-dialog"><form id="name-form"><button type="button" class="dialog-close" aria-label="Fechar">×</button><span class="eyebrow">BIBLIOTECA</span><h2 id="name-heading">Nova pasta</h2><label for="name-input">Nome</label><input id="name-input" maxlength="160" required autocomplete="off"><p id="name-error" role="alert"></p><div class="dialog-actions"><button type="button" class="secondary-button dialog-cancel">Cancelar</button><button type="submit" class="primary-button" id="name-submit">Criar</button></div></form></dialog>
 <dialog id="item-dialog"><button type="button" class="dialog-close" aria-label="Fechar">×</button><h2 id="item-title">Opções</h2><button class="menu-action" id="rename-item">Editar nome <span>↗</span></button><button class="menu-action danger" id="trash-item">Mover para o lixo <span>♲</span></button><p>Os elementos no lixo podem ser restaurados.</p></dialog>
 <dialog id="trash-dialog"><button type="button" class="dialog-close" aria-label="Fechar">×</button><span class="eyebrow">GUARDAR NÃO É PERDER</span><h2>Lixo</h2><p>Restaura primeiro a pasta ou o separador, se também estiverem no lixo.</p><div id="trash-list"></div></dialog>
 </body></html>

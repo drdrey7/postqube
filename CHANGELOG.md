@@ -1,5 +1,14 @@
 # Changelog
 
+## postqube-0.2.0-beta.2
+
+- Ideas reuses the native sidebar/header, theme toggle, notifications and actual
+  design tokens/font. Organizing columns minimize independently.
+- Continuous note editor replaces separate block fields. Task circles insert at
+  the saved cursor position, with plain-text paste, line preservation and undo.
+- Existing block notes remain readable without a destructive data migration.
+
+
 ## postqube-0.2.0-beta.1 — 2026-10-31
 
 Adds Ideas: shared workspace folders → sections → pages → text/task editor,

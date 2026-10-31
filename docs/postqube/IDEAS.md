@@ -1,8 +1,13 @@
 # Ideias — shared workspace notes
 
-Postqube-specific functionality, available at /ideas/. It does not publish posts.
+Postqube-specific functionality, available through Ideas in the native application
+menu. /ideas/ opens /launches?view=ideas inside the original app shell. It does not
+publish posts. The sidebar, header, workspace switcher, theme and notification
+controls remain native; the note surface inherits their actual colors and font.
 
 ![Ideas desktop in a disposable demonstration workspace](assets/ideas-desktop.png)
+
+![Native light theme with independently minimized columns](assets/ideas-light-collapsed.png)
 
 ![Ideas mobile editor with circular task checkboxes](assets/ideas-mobile.png)
 
@@ -11,10 +16,15 @@ Screenshots use disposable demonstration content, never customer notes.
 ## Organize from left to right
 
 Folders → Sections → Pages → Editor. Use + in each column to create an item, then
-select it to continue. A page supports free text and circular task checkboxes.
-Click a circle to mark a task done; click again to reopen it. The task text is
-crossed out but retained. Enter inside a task creates the next task; Shift+Enter
-adds a line inside the same task. The text toolbar adds ordinary text blocks.
+select it to continue. A page has one continuous text surface, without separate fields or add-block
+buttons. Place the cursor before a word and click Tarefa to insert a circular
+checkbox exactly there. Click a circle to complete/reopen the task. Enter inside a
+task continues the checklist; an empty task exits it. Shift+Enter inserts a line.
+Texto normal removes the task marker from the current line. Paste inserts plain
+text, preserving line breaks. Native undo/redo applies to text and marker insertion.
+
+Each organizing column can be minimized independently through its top chevron.
+Click its vertical label to reopen it. The choice is saved in the browser.
 
 On mobile, the bottom navigation switches between the four levels rather than
 squeezing four narrow columns onto the screen. Rename items through their ⋯ menu.
@@ -43,6 +53,10 @@ copy, save as a new page, or open the current server version. No silent last-wri
 wins and no real-time collaborative cursor editing are claimed.
 
 ## Deployment and backup
+
+The editor is embedded from /ideas/editor/ into the native shell. The separate
+service verifies the same native session on every data request. No duplicate shell
+controls or theme preference are maintained.
 
 Service source: postqube/ideas, Node 22.23.4 with built-in SQLite; no npm runtime
 dependencies. The official Postiz image remains unchanged. Mount /data persistently,
