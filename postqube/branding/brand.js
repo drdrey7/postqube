@@ -36,41 +36,7 @@
       event.preventDefault(); event.stopImmediatePropagation(); instagramNotice();
     }
   }, true);
-  function nativeIdeas() {
-    const active = location.pathname === '/launches' && new URLSearchParams(location.search).get('view') === 'ideas';
-    const shell = document.querySelector('.blurMe.bg-newBgLineColor');
-    if (!shell) return;
-    const content = shell.lastElementChild, title = shell.querySelector('h1');
-    const layout = shell.closest('[class*="min-h-screen"]');
-    if (!active) {
-      const link = document.querySelector('.postqube-ideas-link'); link?.removeAttribute('aria-current'); link?.classList.remove('postqube-ideas-active');
-      content.removeAttribute('data-postqube-ideas-content'); layout?.removeAttribute('data-postqube-ideas-layout');
-      document.getElementById('postqube-ideas-frame')?.remove();
-      if (title?.dataset.postqubeTitle) { if (title.textContent === 'Ideias') title.textContent = title.dataset.postqubeTitle; delete title.dataset.postqubeTitle; }
-      return;
-    }
-    if (title && title.textContent !== 'Ideias') { title.dataset.postqubeTitle = title.textContent; title.textContent = 'Ideias'; }
-    document.title = 'Ideias · Postqube';
-    content.setAttribute('data-postqube-ideas-content', ''); layout?.setAttribute('data-postqube-ideas-layout', '');
-    let frame = document.getElementById('postqube-ideas-frame');
-    if (!frame) {
-      frame = document.createElement('iframe'); frame.id = 'postqube-ideas-frame';
-      frame.title = 'Ideias do espaço de trabalho'; frame.src = '/ideas/editor/';
-      content.append(frame);
-    }
-    const link = document.querySelector('.postqube-ideas-link');
-    if (link) { link.setAttribute('aria-current', 'page'); link.classList.add('postqube-ideas-active'); }
-  }
   function decorate() {
-    nativeIdeas();
-    const calendar = document.querySelector('#left-menu a[href="/launches"]');
-    if (calendar && !document.querySelector('#left-menu .postqube-ideas-link')) {
-      const link = document.createElement('a');
-      link.href = '/launches?view=ideas'; link.title = 'Ideias';
-      link.className = calendar.className.split(/\s+/).filter(c => !['text-textItemFocused', 'bg-boxFocused'].includes(c)).join(' ') + ' text-textItemBlur postqube-ideas-link';
-      link.innerHTML = '<div class="custom:scale-90 transition-transform"><svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2ZM3 7h5M3 12h5M3 17h5M11 8h6M11 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="custom:text-[9px] minCustom:text-[10px] leading-[1.1] text-center">Ideias</div>';
-      calendar.insertAdjacentElement('afterend', link);
-    }
     for (const close of document.querySelectorAll('.mantine-Modal-close')) {
       const panel = close.parentElement;
       if (panel?.classList.contains('bg-newBgColorInner')) {
@@ -87,7 +53,7 @@
       const footer = document.createElement('footer');
       footer.className = 'postqube-source';
       footer.setAttribute('aria-label', 'Postqube source and license');
-      footer.innerHTML = '<a href="https://github.com/drdrey7/postqube/tree/postqube-0.2.0-beta.2" target="_blank" rel="noopener noreferrer">Código-fonte</a><span> · </span><a href="https://github.com/drdrey7/postqube/blob/postqube-0.2.0-beta.2/LICENSE" target="_blank" rel="noopener noreferrer">AGPL</a><span> · </span><a href="https://drdrey7.github.io/postqube/" target="_blank" rel="noopener noreferrer">Ajuda</a>';
+      footer.innerHTML = '<a href="https://github.com/drdrey7/postqube/tree/postqube-0.3.0-beta.1" target="_blank" rel="noopener noreferrer">Código-fonte</a><span> · </span><a href="https://github.com/drdrey7/postqube/blob/postqube-0.3.0-beta.1/LICENSE" target="_blank" rel="noopener noreferrer">AGPL</a><span> · </span><a href="https://drdrey7.github.io/postqube/" target="_blank" rel="noopener noreferrer">Ajuda</a>';
       document.body.append(footer);
     }
     if (/postiz/i.test(document.title)) document.title = document.title.replace(/postiz/gi, name);
@@ -169,9 +135,6 @@
     }
   }
   function start() {
-    window.addEventListener('popstate', decorate);
-    document.addEventListener('click', () => setTimeout(decorate, 150));
-    setInterval(() => { const active = location.pathname === '/launches' && new URLSearchParams(location.search).get('view') === 'ideas'; if (active !== !!document.getElementById('postqube-ideas-frame')) decorate(); }, 500);
     fetch('/postqube/config.json', {cache:'no-store'}).then(r => r.json()).then(c => {
       instagramReady = c.instagramReady === true;
       if (instagramReady) document.querySelectorAll('[data-postqube-instagram]').forEach(card => {

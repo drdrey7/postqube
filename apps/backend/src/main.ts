@@ -71,6 +71,7 @@ async function start() {
     json({ limit: '50mb' })(req, res, next);
   });
 
+  app.use('/ideas', json({ limit: '1mb' }));
   app.use(cookieParser());
   app.use(compression());
   app.useGlobalFilters(new SubscriptionExceptionFilter());

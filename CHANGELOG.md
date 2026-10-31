@@ -1,5 +1,14 @@
 # Changelog
 
+## postqube-0.3.0-beta.1
+
+- Replaces the Ideas iframe/overlay with a real Next.js route and React workspace.
+  Existing native MenuItem/Link performs client-side navigation without reload.
+- Moves authentication and note persistence into native Nest/Prisma/PostgreSQL.
+- Migrates legacy notes transactionally, preserving and verifying all fields.
+- Retires the separate Ideas service/proxy; native backups cover workspace notes.
+
+
 ## postqube-0.2.0-beta.2
 
 - Ideas reuses the native sidebar/header, theme toggle, notifications and actual

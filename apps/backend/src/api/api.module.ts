@@ -1,3 +1,4 @@
+import { IdeasController, IdeasService } from './routes/ideas.controller';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthController } from '@gitroom/backend/api/routes/auth.controller';
 import { AuthService } from '@gitroom/backend/services/auth/auth.service';
@@ -58,6 +59,7 @@ import { OauthProvider } from '@gitroom/backend/services/auth/providers/oauth.pr
 import { StripeController } from '@gitroom/backend/api/routes/stripe.controller';
 
 const authenticatedController = [
+  IdeasController,
   UsersController,
   AnalyticsController,
   IntegrationsController,
@@ -103,6 +105,7 @@ const authenticatedController = [
         ...authenticatedController,
       ],
   providers: [
+    IdeasService,
     AuthService,
     StripeService,
     PaymentService,

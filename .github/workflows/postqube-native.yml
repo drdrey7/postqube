@@ -1,0 +1,28 @@
+name: Postqube native build
+on:
+  pull_request:
+    branches: [postqube]
+    paths: ['apps/**', 'libraries/**', 'postqube/native/**', '.github/workflows/postqube-native.yml']
+  push:
+    branches: [postqube]
+    paths: ['apps/**', 'libraries/**', 'postqube/native/**', '.github/workflows/postqube-native.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Build native frontend, backend and Prisma client
+        run: docker build -t postqube:native-ci -f postqube/native/Dockerfile .
+      - name: Export tested image for deployment
+        run: docker save postqube:native-ci | gzip -1 > "$RUNNER_TEMP/postqube-native-image.tar.gz"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: postqube-native-image
+          path: ${{ runner.temp }}/postqube-native-image.tar.gz
+          retention-days: 1

@@ -1,10 +1,16 @@
 // @ts-check
 import { withSentryConfig } from '@sentry/nextjs';
 
+// Source maps/instrumentation are built only when Sentry is configured.
+const sentryEnabled = Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     proxyTimeout: 90_000,
+    webpackMemoryOptimizations: true,
+    webpackBuildWorker: true,
+    cpus: 1,
   },
   // Document-Policy header for browser profiling
   async headers() {
@@ -23,19 +29,21 @@ const nextConfig = {
   reactStrictMode: false,
   transpilePackages: ['crypto-hash'],
   // Enable production sourcemaps for Sentry
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: sentryEnabled,
 
   // Custom webpack config to ensure sourcemaps are generated properly
   webpack: (config, { buildId, dev, isServer, defaultLoaders }) => {
     // Enable sourcemaps for both client and server in production
-    if (!dev) {
+    if (!dev && sentryEnabled) {
       config.devtool = isServer ? 'source-map' : 'hidden-source-map';
     }
 
+    if (!dev && !sentryEnabled) config.devtool = false;
     return config;
   },
   async redirects() {
     return [
+      { source: '/launches', has: [{ type: 'query', key: 'view', value: 'ideas' }], destination: '/ideas', permanent: false },
       {
         source: '/api/uploads/:path*',
         destination:
@@ -57,7 +65,7 @@ const nextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
+export default sentryEnabled ? withSentryConfig(nextConfig, {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
   authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -109,4 +117,4 @@ export default withSentryConfig(nextConfig, {
     // Don't fail the build if Sentry upload fails in monorepo context
     return;
   },
-});
+}) : nextConfig;

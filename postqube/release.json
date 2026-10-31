@@ -1,9 +1,10 @@
 {
-  "version": "postqube-0.2.0-beta.2",
+  "version": "postqube-0.3.0-beta.1",
   "upstream": "gitroomhq/postiz-app",
   "upstreamTag": "v2.25.3",
   "upstreamCommit": "a5affe62c74e39c1e7ac960d50d8418b807d532c",
-  "runtimeImage": "ghcr.io/gitroomhq/postiz-app:v2.25.3",
-  "distribution": "official-image-plus-postqube-overlay-and-ideas-service",
+  "runtimeImage": "postqube:0.3.0-beta.1",
+  "runtimeBaseImage": "ghcr.io/gitroomhq/postiz-app:v2.25.3",
+  "distribution": "native-postqube-build",
   "status": "beta"
 }

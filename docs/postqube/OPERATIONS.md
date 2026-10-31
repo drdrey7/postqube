@@ -10,7 +10,7 @@ Keep databases, Redis, Temporal and privileged panels off public raw ports.
 ## Backups
 
 Back up application PostgreSQL, Temporal PostgreSQL, uploads, protected environment,
-Compose/proxy configuration, the Ideas SQLite snapshot and Postqube source version. Encrypt backups containing
+Compose/proxy configuration, the native Ideas records and Postqube source version. Encrypt backups containing
 secrets, restrict access and keep an off-server copy. Verify hashes and perform a
 restore in an isolated environment. A successful archive alone is not a restore test.
 The current live backup job contains operational secrets and is intentionally not
@@ -30,7 +30,8 @@ and desktop and review Meta settings/legal URLs. Do not buy a domain automatical
 
 ## Ideas recovery
 
-The daily backup includes a consistent VACUUM INTO snapshot from the Ideas service
-and its source/configuration. Restore the snapshot into a separate data directory,
-check SQLite integrity, and verify workspace isolation before replacing production.
+Ideas are included in the native PostgreSQL dump and the matching native source
+configuration archive. Restore into an isolated database with the matching image,
+then verify notes, tasks and workspace isolation. Legacy SQLite snapshots remain
+private recovery archives; the retired container is not needed by the daily job.
 See [Ideas](IDEAS.md). Include this separate store in workspace deletion requests.
