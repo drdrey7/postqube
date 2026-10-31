@@ -22,6 +22,8 @@ jobs:
           persist-credentials: false
       - name: Build native frontend, backend and Prisma client
         run: docker build -t postqube:native-ci -f postqube/native/Dockerfile .
+      - name: Test native note serialization
+        run: docker run --rm --entrypoint pnpm -v "$PWD/postqube/native/test:/app/postqube/native/test:ro" postqube:native-ci exec jest --config postqube/native/test/jest.config.cjs --runInBand
       - name: Export tested image for deployment
         run: docker save postqube:native-ci | gzip -1 > "$RUNNER_TEMP/postqube-native-image.tar.gz"
       - uses: actions/upload-artifact@v4

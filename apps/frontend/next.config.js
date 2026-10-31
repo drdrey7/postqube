@@ -27,6 +27,8 @@ const nextConfig = {
     ];
   },
   reactStrictMode: false,
+  // Sanitization uses jsdom assets via Node filesystem paths on the server.
+  serverExternalPackages: ['isomorphic-dompurify', 'jsdom', 'canvas'],
   transpilePackages: ['crypto-hash'],
   // Enable production sourcemaps for Sentry
   productionBrowserSourceMaps: sentryEnabled,

@@ -18,6 +18,9 @@ Use the public repository checkout as the context, with a credential-free
 The base image is the documented Postiz release; native frontend/backend and
 Prisma client are rebuilt. Never copy a live environment file into the context.
 Build with sufficient memory; the upstream TypeScript graph needs a 4 GB heap.
+Webpack uses a persistent compiler cache and documented memory optimizations.
+Unconfigured Sentry does not generate source maps or instrument the production
+bundle; configuring Sentry requires a build with the public DSN available.
 Production environment is supplied at runtime through the existing protected
 Compose configuration, retaining its private networks, database and uploads.
 
