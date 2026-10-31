@@ -1,0 +1,70 @@
+# Host reverse proxy. Upstream Postiz remains the official image on loopback.
+server {
+    listen PUBLIC_IPV4:80 default_server;
+    server_name _;
+    return 444;
+}
+server {
+    listen PUBLIC_IPV4:80;
+    server_name postqube.example.com;
+    location ^~ /.well-known/acme-challenge/ { root /var/www/postqube-acme; }
+    location / { return 301 https://postqube.example.com$request_uri; }
+}
+server {
+    listen PUBLIC_IPV4:443 ssl http2;
+    server_name postqube.example.com;
+    ssl_certificate /etc/letsencrypt/live/postqube.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/postqube.example.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_session_cache shared:postqube_tls:10m;
+    client_max_body_size 100m;
+    if ($host != postqube.example.com) { return 444; }
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy same-origin always;
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header Strict-Transport-Security "max-age=86400" always;
+
+    location = /postqube/brand.js { alias /opt/postqube/branding/brand.js; add_header Cache-Control "no-cache"; }
+    location = /postqube/brand.css { alias /opt/postqube/branding/brand.css; add_header Cache-Control "no-cache"; }
+    location = /postqube/config.json { alias /opt/postqube/branding/config.json; add_header Cache-Control "no-store"; }
+    location ^~ /postqube/ {
+        alias /opt/postqube/branding/;
+        add_header Cache-Control "public, max-age=3600";
+        add_header X-Content-Type-Options nosniff always;
+    }
+    location = /favicon.ico { alias /opt/postqube/branding/favicon.ico; }
+    location = /favicon.png { alias /opt/postqube/branding/icon-256.png; }
+    location = /postiz-fav.png { alias /opt/postqube/branding/icon-256.png; }
+    location = /logo.svg { alias /opt/postqube/branding/mark.svg; }
+    location = /postiz.svg { alias /opt/postqube/branding/mark.svg; }
+    location = /logo-text.svg { alias /opt/postqube/branding/wordmark.svg; }
+    location = /postiz-text.svg { alias /opt/postqube/branding/wordmark.svg; }
+
+    # BEGIN META SETUP GUARD — remove only after the Meta app is configured.
+    location = /api/integrations/social/instagram-standalone {
+        default_type application/json;
+        return 503 '{"message":"Instagram is being configured. Please contact the administrator."}';
+    }
+    # END META SETUP GUARD
+    location ~ ^/api/integrations/social/(?!x$|instagram-standalone$) {
+        default_type application/json;
+        return 403 '{"message":"This beta supports X and Instagram only."}';
+    }
+    location ~ ^/api/integrations/provider/(?!(?:x|instagram-standalone)/connect$) {
+        default_type application/json;
+        return 403 '{"message":"This beta supports X and Instagram only."}';
+    }
+    location ^~ /api/auth/ {
+        limit_req zone=postqube_auth burst=10 nodelay;
+        limit_req_status 429;
+        include /etc/nginx/snippets/postqube-proxy.conf;
+        proxy_pass http://127.0.0.1:4007;
+    }
+    location / {
+        include /etc/nginx/snippets/postqube-proxy.conf;
+        proxy_pass http://127.0.0.1:4007;
+        sub_filter_once on;
+        sub_filter '</head>' '<link rel="stylesheet" href="/postqube/brand.css?v=2"><script defer src="/postqube/brand.js?v=2"></script></head>';
+        sub_filter '<title>Postiz' '<title>Postqube';
+    }
+}

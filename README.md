@@ -1,198 +1,89 @@
-<p align="center">
-  <a href="https://postiz.com/" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/765e9d72-3ee7-4a56-9d59-a2c9befe2311">
-    <img alt="Postiz Logo" src="https://github.com/user-attachments/assets/f0d30d70-dddb-4142-8876-e9aa6ed1cb99" width="280"/>
-  </picture>
-  </a>
-</p>
+<p align="center"><img src="postqube/branding/wordmark.svg" alt="Postqube" width="280"></p>
 
-<p align="center">
-<a href="https://opensource.org/license/agpl-v3">
-  <img src="https://img.shields.io/badge/License-AGPL%203.0-blue.svg" alt="License">
-</a>
-</p>
+<h1 align="center">Your content. Your next move.</h1>
+<p align="center">An open-source social publishing workspace, based on Postiz.</p>
+<p align="center"><a href="LICENSE">AGPL-3.0</a> · <a href="https://drdrey7.github.io/postqube/">Documentation</a> · <a href="docs/postqube/GETTING-STARTED.md">Get started</a> · <a href="docs/postqube/LAUNCH.md">Launch readiness</a></p>
 
-<div align="center">
-  <strong>
-    <a href="https://postiz.com">Postiz</a> is a social media management platform for scheduling, automating, and analyzing your content.
-    
-  Use Postiz Cloud for a fully managed experience, or deploy the open-source edition on your own infrastructure.
-  </strong>
-</div>
+> **Public beta, not a finished commercial launch.** The test deployment is at
+> https://postqube.ownthecrown.lol. Domain may change. X is connected in the owner's
+> workspace; each user must authorize their own channel. Instagram remains pending
+> Meta configuration. AI, transactional email and payments are not configured.
 
-<p align="center">
-  <br />
-  <a href="https://docs.postiz.com" rel="dofollow"><strong>Explore the docs »</strong></a>
-  <br />
+![Postqube desktop calendar — isolated empty test workspace](docs/postqube/assets/calendar-desktop.png)
 
-  <br />
-  <a href="https://youtube.com/@postizofficial" rel="dofollow"><strong>Watch the YouTube Tutorials»</strong></a>
-  <br />
-</p>
+## What is Postqube?
 
-<p align="center">
-  <a href="https://platform.postiz.com">Register</a>
-  ·
-  <a href="https://discord.postiz.com">Join Our Discord (devs only)</a>
-  ·
-  <a href="https://docs.postiz.com/public-api">Public API</a><br />
-</p>
-<p align="center">
-  <a href="https://www.npmjs.com/package/@postiz/node">NodeJS SDK</a>
-  ·
-  <a href="https://www.npmjs.com/package/n8n-nodes-postiz">N8N custom node</a>
-  ·
-  <a href="https://apps.make.com/postiz">Make.com integration</a>
-</p>
+Postqube gives this independent project its own identity while preserving the
+Postiz scheduling engine, accounts, workspaces and upstream update path.
+The complete upstream source is kept here; Postqube-specific presentation and
+operations files are easy to find. See [provenance and changes](UPSTREAM.md).
 
-<br />
+## What you can test
 
-<p align="center"><strong>Schedule posts to:</strong></p>
-<div class="flex" align="center">
-  <img alt="Instagram" src="https://postiz.com/svgs/socials/Instagram.svg" width="32">
-  <img alt="Youtube" src="https://postiz.com/svgs/socials/Youtube.svg" width="32">
-  <img alt="Dribbble" src="https://postiz.com/svgs/socials/Dribbble.svg" width="32">
-  <img alt="Linkedin" src="https://postiz.com/svgs/socials/Linkedin.svg" width="32">
-  <img alt="Reddit" src="https://postiz.com/svgs/socials/Reddit.svg" width="32">
-  <img alt="TikTok" src="https://postiz.com/svgs/socials/TikTok.svg" width="32">
-  <img alt="Facebook" src="https://postiz.com/svgs/socials/Facebook.svg" width="32">
-  <img alt="Pinterest" src="https://postiz.com/svgs/socials/Pinterest.svg" width="32">
-  <img alt="Threads" src="https://postiz.com/svgs/socials/Threads.svg" width="32">
-  <img alt="X" src="https://postiz.com/svgs/socials/X.svg" width="32">
-  <img alt="Slack" src="https://postiz.com/svgs/socials/Slack.svg" width="32">
-  <img alt="Discord" src="https://postiz.com/svgs/socials/Discord.svg" width="32">
-  <img alt="Mastodon" src="https://postiz.com/svgs/socials/Mastodon.svg" width="32">
-  <img alt="Bluesky" src="https://postiz.com/svgs/socials/Bluesky.svg" width="32">
-</div>
+| Capability | State |
+| --- | --- |
+| Email/password signup; optional company | Verified with disposable accounts |
+| Separate workspaces | Verified |
+| Desktop/mobile calendar | Visually checked at 1440×1000 and 390×844 |
+| X connection and native API | Verified; paid live publishing not retested |
+| Instagram image/carousel/Reel/Story support | Native upstream capability; connection not activated |
+| Owner activity/error administration | Access verified; not a full user/cost dashboard |
+| AI text assistant | Native code present; provider configuration required |
+| Password reset / invitation email | Native code present; delivery configuration required |
+| Subscriptions | Native code present; Stripe setup and testing required |
 
-<p align="center"><strong>With your favorite AI agent:</strong></p>
-<div class="flex" align="center">
-  <a href="https://postiz.com/chatgpt" title="ChatGPT"><img alt="ChatGPT" src=".github/agents/chatgpt.svg" width="32"></a>
-  <a href="https://postiz.com/claude" title="Claude"><img alt="Claude" src=".github/agents/claude.svg" width="32"></a>
-  <a href="https://postiz.com/claude-code" title="Claude Code"><img alt="Claude Code" src=".github/agents/claude-code.svg" width="32"></a>
-  <a href="https://postiz.com/codex" title="Codex"><img alt="Codex" src=".github/agents/codex.svg" width="32"></a>
-  <a href="https://postiz.com/cursor" title="Cursor"><img alt="Cursor" src=".github/agents/cursor.svg" width="32"></a>
-  <a href="https://postiz.com/openclaw" title="OpenClaw"><img alt="OpenClaw" src=".github/agents/openclaw.svg" width="32"></a>
-  <a href="https://postiz.com/hermes" title="Hermes Agent"><img alt="Hermes Agent" src=".github/agents/hermes-agent.svg" width="32"></a>
-  <a href="https://postiz.com/grok-bot" title="Grok Bot"><img alt="Grok Bot" src=".github/agents/grok-bot.svg" width="32"></a>
-  <a href="https://postiz.com/grok-build" title="Grok Build"><img alt="Grok Build" src=".github/agents/grok-build.svg" width="32"></a>
-  <a href="https://postiz.com/muse" title="Muse"><img alt="Muse" src=".github/agents/muse.svg" width="32"></a>
-  <a href="https://postiz.com/perplexity-computer" title="Perplexity Computer"><img alt="Perplexity Computer" src=".github/agents/perplexity-computer.svg" width="32"></a>
-  <a href="https://postiz.com/nanoclaw" title="nanoclaw"><img alt="nanoclaw" src=".github/agents/nanoclaw.svg" width="32"></a>
-  <a href="https://postiz.com/paperclip" title="Paperclip"><img alt="Paperclip" src=".github/agents/paperclip.svg" width="32"></a>
-  <a href="https://postiz.com/mcp" title="MCP Server"><img alt="MCP Server" src=".github/agents/mcp-server.svg" width="32"></a>
-  <a href="https://postiz.com/agent" title="AI Agents CLI"><img alt="AI Agents CLI" src=".github/agents/ai-agents-cli.svg" width="32"></a>
-</div>
+<table><tr><td width="30%"><img src="docs/postqube/assets/calendar-mobile.png" alt="Real mobile calendar in an empty test workspace" width="260"></td><td><img src="docs/postqube/assets/channels.png" alt="Channel picker with X and Instagram explicitly marked pending"><p>Screenshots show an isolated empty test workspace. They do not contain customer data or imply Instagram is connected.</p></td></tr></table>
 
-<br />
+## Start here
 
-## 🔌 See the leading Postiz features
+- **Use it:** [Getting started](docs/postqube/GETTING-STARTED.md) · [User guide](docs/postqube/USER-GUIDE.md)
+- **Operate it:** [Deployment](docs/postqube/DEPLOYMENT.md) · [Backups and recovery](docs/postqube/OPERATIONS.md)
+- **Connect channels:** [X and Instagram](docs/postqube/CHANNELS.md)
+- **Extend it:** [Architecture](docs/postqube/ARCHITECTURE.md) · [Development](docs/postqube/DEVELOPMENT.md)
+- **Maintain it:** [Upstream updates](docs/postqube/UPDATES.md) · [Security](docs/postqube/SECURITY.md)
+- **Launch it:** [Readiness checklist](docs/postqube/LAUNCH.md) · [Legal/licensing](docs/postqube/LEGAL.md)
+- **Understand limits:** [Status](docs/postqube/STATUS.md) · [FAQ](docs/postqube/FAQ.md)
 
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=BdsCVvEYgHU" target="_blank">
-    <img alt="Postiz" src="https://github.com/user-attachments/assets/8b9b7939-da1a-4be5-95be-42c6fce772de" />
-  </a>
-</p>
+## Quick preview of the documentation
 
-## ✨ Features
+```sh
+python3 scripts/postqube/build-docs.py
+python3 -m http.server 8088 --directory .postqube-site
+```
 
-| ![Image 1](https://github.com/user-attachments/assets/a27ee220-beb7-4c7e-8c1b-2c44301f82ef) | ![Image 2](https://github.com/user-attachments/assets/eb5f5f15-ed90-47fc-811c-03ccba6fa8a2) |
-| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| ![Image 3](https://github.com/user-attachments/assets/d51786ee-ddd8-4ef8-8138-5192e9cfe7c3) | ![Image 4](https://github.com/user-attachments/assets/91f83c89-22f6-43d6-b7aa-d2d3378289fb) |
+Open http://localhost:8088. This serves documentation only, not the application.
+For the application, follow [Deployment](docs/postqube/DEPLOYMENT.md). Do not run
+the root upstream Compose file unchanged as a hardened public deployment.
 
-### Our Sponsors
+## Repository map
 
-| Sponsor |                                  Logo                                   | Description     |
-|---------|:-----------------------------------------------------------------------:|-----------------|
-| [Hostinger](https://www.hostinger.com/vps/docker/postiz?ref=postiz) | <img src=".github/sponsors/hostinger.png" alt="Hostinger" width="500"/> | Hostinger is on a mission to make online success possible for anyone – from developers to aspiring bloggers and business owners |
-| [Virlo](https://dev.virlo.ai/?ref=postiz) | <img src="https://github.com/user-attachments/assets/25182598-5344-45fc-b9cd-e4cfa16aabfd" alt="Virlo" width="500"/> | Virlo is the #1 social media trend spotting and all-in-one GTM tool for teams leveraging short-form video |
-| [ChatbotX](https://chatbotx.io/?ref=postiz) | <img src="https://github.com/user-attachments/assets/0aa6b058-9a64-46d3-bc26-337abc51737d" alt="ChatbotX" width="500"/> | The ManyChat alternative that you can self-host, white-label, and resell to your clients. Bring your own OpenClaw, Hermes, or Claude agents! |
-| [RapidProxy](https://www.rapidproxy.io/?ref=postiz) | <img width="700" height="412" alt="WP-PROXY-THUMBNAIL-41" src="https://github.com/user-attachments/assets/6cf5b2c9-2687-4181-8964-2e7b90eace4f" /> | RapidProxy provides 90M+ residential IPs for social media, browser automation, and AI workflows, with smart rotation and stable sessions. From $0.55/GB; use RAPID10 for 10% off.
+```text
+apps/                 Original frontend, backend, orchestrator and other apps
+libraries/            Original shared product code
+postqube/branding/    Postqube UI customization and original SVG assets
+postqube/deploy/      Sanitized configuration examples, not live credentials
+postqube/release.json Exact release/upstream/runtime provenance
+scripts/postqube/     Validation, documentation and operator helpers
+docs/postqube/        Human-readable guides and real screenshots
+UPSTREAM.md           Original project attribution and modification record
+NOTICE.md / LICENSE   Notices and license
+```
 
+## Commercial use and source
 
-# Intro
+You may charge for hosting/support while complying with the AGPL and applicable
+third-party terms. Offer users the source corresponding to the running version.
+Keep copyright/license notices and modification records. Credentials and customer
+data stay private. This is not a proprietary relicensing of Postiz. See
+[LICENSE](LICENSE), [notices](NOTICE.md) and [legal readiness](docs/postqube/LEGAL.md).
 
-- Schedule all your social media posts (many AI features)
-- Measure your work with analytics.
-- Collaborate with other team members to exchange or buy posts.
-- Invite your team members to collaborate, comment, and schedule posts.
-- Perfect for automation (API) with platforms like N8N, Make.com, Zapier, etc.
+**Polotno needs its own production license.** Platform APIs, media rights and
+provider billing are separate. Public source does not remove those obligations.
 
-## Tech Stack
+## Contributing
 
-- Pnpm workspaces (Monorepo)
-- NextJS (React)
-- NestJS
-- Prisma (Default to PostgreSQL)
-- Temporal
-- Resend (email notifications)
-
-## Quick Start
-
-To have the project up and running, please follow the [Quick Start Guide](https://docs.postiz.com/quickstart)
-
-## Sponsor Postiz
-
-We now offer a few options to sponsor Postiz:
-- Just a donation: You like what we are building, and want to buy us some coffee so we can build faster.
-- Main repository: Get your logo with a backlink from the main Postiz repository. Postiz has over 7M downloads and 20k views per month.
-
-Link: https://opencollective.com/postiz
-
- <br />
-  <br />
-
-## Postiz Cloud vs. Open-source
-
-Choose [Postiz Cloud](https://postiz.com/) for a fully managed experience, or deploy Postiz Open-source on your own infrastructure. Both provide the same core Postiz product and features.
-
-We do not "gate" features or limit the license.
-
-The main difference is the infrastructure you need to own, approval from social media providers, and deployment that might be hard at times (let your LLM deploy it)
-
-| Area | Postiz Cloud | Postiz Open-source (self-hosted) |
-|---|---|---|
-| **Cost** | Subscription per plan, 7-day free trial | Free forever (AGPL-3.0); you pay only for your own infra |
-| **Setup time** | Sign up and connect channels in minutes | Deploy with Docker / Coolify / Railway / any VPS; you configure Postgres, Redis, storage and env vars |
-| **Hosting & data** | Hosted by Postiz; data stored in our infrastructure | Runs on your own server; data never leaves your environment |
-| **Social platform apps** | Pre-approved apps for every channel, ready to use | You create your own developer apps on each platform and go through their approval (Meta, YouTube, TikTok can take weeks) |
-| **Channels** | Limited by plan tier | Unlimited, every supported provider |
-| **Posts per month** | Limited by plan tier | Unlimited |
-| **Team members** | Limited by plan tier | Unlimited |
-| **Scheduling, calendar views, cross-posting, repeated posts, post comments & delays, sets, signatures** | Included | Included |
-| **Internal & Global Plugs, RSS auto-post, customer groups** | Included per plan | Included |
-| **Analytics** | Included per plan | Included (requires your own app credentials with analytics scopes) |
-| **AI Copilot, AI images, AI videos** | Included with monthly quotas per plan; keys managed by Postiz | Available if you bring your own OpenAI (and other provider) API keys; no quota, you pay the provider |
-| **AI video clipping** | Included with monthly clipping minutes per plan | Requires your own provider keys and extra configuration |
-| **Smart Agent** | Included per plan | Available with your own LLM key |
-| **Public API & webhooks** | Included per plan | Included |
-| **Agentic surfaces (MCP, CLI, Claude / ChatGPT / Codex / OpenClaw / Cursor connectors)** | Included, hosted MCP endpoint | Included, you point the MCP / CLI at your own instance |
-| **Custom integrations** | Included per plan | Included; you can also modify the code and add providers |
-| **Updates & maintenance** | Automatic, zero downtime for you | You pull new images and run migrations yourself |
-| **Uptime, backups, security patches** | Managed by Postiz | Your responsibility |
-| **Support** | Priority support via Discord / email per plan | Community support on Discord and GitHub |
-| **Source access & customization** | No (SaaS) | Full source code, fork and modify freely under AGPL |
-| **Compliance / data residency** | Postiz-controlled regions | Any region or air-gapped environment you choose |
-
-<br />
-<br />
-  
-## Postiz Compliance
-
-- This GitHub repository contains the open-source, self-hosted edition of Postiz. Postiz is also available as Postiz Cloud, a fully managed service at postiz.com.
-- Postiz hosted service uses official, platform-approved OAuth flows.
-- Postiz does not automate or scrape content from social media platforms.
-- Postiz does not collect, store, or proxy API keys or access tokens from users.
-- Postiz never asks users to paste API keys into our hosted product.
-- Postiz users always authenticate directly with the social platform (e.g., X, Discord, etc.), ensuring platform compliance and data privacy.
-
-## License
-
-This repository's source code is available under the [AGPL-3.0 license](LICENSE).
-
-<br /><br />
-
-<p align="center">
-  <img src="https://github.com/snyk-labs/secure-developer-sample-repo/raw/main/badge_full.svg" alt="Secure Developer Badge Full" width="150">
-</p>
+Open focused issues/PRs against this project's `postqube` branch. Follow
+[Postqube contribution guidance](docs/postqube/CONTRIBUTING.md). No unsolicited
+publishing, live customer data or secrets in tests/issues. The original upstream
+contribution documents remain in the repository for provenance; they do not
+automatically require a Postqube contributor to sign an upstream CLA.

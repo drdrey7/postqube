@@ -1,0 +1,92 @@
+# Postqube reference topology. Fresh installs only; do not replace existing volumes.
+services:
+  postiz:
+    image: ghcr.io/gitroomhq/postiz-app:v2.25.3
+    restart: unless-stopped
+    ports: ["127.0.0.1:4007:5000"]
+    environment:
+      MAIN_URL: ${PUBLIC_URL:?Set PUBLIC_URL}
+      FRONTEND_URL: ${PUBLIC_URL:?Set PUBLIC_URL}
+      NEXT_PUBLIC_BACKEND_URL: ${PUBLIC_URL:?Set PUBLIC_URL}/api
+      BACKEND_INTERNAL_URL: http://localhost:3000
+      JWT_SECRET: ${JWT_SECRET:?Set a random JWT_SECRET}
+      DATABASE_URL: postgresql://postiz:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}@postiz-postgres:5432/postiz
+      REDIS_URL: redis://postiz-redis:6379
+      TEMPORAL_ADDRESS: temporal:7233
+      IS_GENERAL: "true"
+      DISABLE_REGISTRATION: "false"
+      STORAGE_PROVIDER: local
+      UPLOAD_DIRECTORY: /uploads
+      NEXT_PUBLIC_UPLOAD_DIRECTORY: /uploads
+      DISABLE_X_ANALYTICS: "true"
+      HIDDEN_PROVIDERS: "linkedin,linkedin-page,reddit,instagram,facebook,threads,youtube,gmb,tiktok,tiktok-business,pinterest,dribbble,discord,slack,kick,twitch,mastodon,bluesky,lemmy,wrapcast,telegram,nostr,vk,medium,devto,hashnode,wordpress,listmonk,moltbook,whop,skool,mewe,tumblr"
+      X_API_KEY: ${X_API_KEY:-}
+      X_API_SECRET: ${X_API_SECRET:-}
+      INSTAGRAM_APP_ID: ${INSTAGRAM_APP_ID:-}
+      INSTAGRAM_APP_SECRET: ${INSTAGRAM_APP_SECRET:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      API_LIMIT: "30"
+    volumes:
+      - postiz-config:/config
+      - postiz-uploads:/uploads
+      - ./app-nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      postiz-postgres: {condition: service_healthy}
+      postiz-redis: {condition: service_healthy}
+      temporal: {condition: service_started}
+  postiz-postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postiz
+      POSTGRES_DB: postiz
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes: ["postgres-volume:/var/lib/postgresql/data"]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U postiz -d postiz"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+  postiz-redis:
+    image: redis:7.2
+    restart: unless-stopped
+    volumes: ["redis-data:/data"]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+  temporal-postgresql:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: temporal
+      POSTGRES_PASSWORD: ${TEMPORAL_POSTGRES_PASSWORD:?Set TEMPORAL_POSTGRES_PASSWORD}
+    volumes: ["temporal-postgres:/var/lib/postgresql/data"]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U temporal"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+  temporal:
+    image: temporalio/auto-setup:1.28.1
+    restart: unless-stopped
+    environment:
+      DB: postgres12
+      DB_PORT: "5432"
+      POSTGRES_USER: temporal
+      POSTGRES_PWD: ${TEMPORAL_POSTGRES_PASSWORD:?Set TEMPORAL_POSTGRES_PASSWORD}
+      POSTGRES_SEEDS: temporal-postgresql
+      ENABLE_ES: "false"
+      ENABLE_ES_VISIBILITY: "false"
+      SKIP_ADD_CUSTOM_SEARCH_ATTRIBUTES: "true"
+      DYNAMIC_CONFIG_FILE_PATH: config/dynamicconfig/development-sql.yaml
+    volumes: ["./temporal-dynamic.yaml:/etc/temporal/config/dynamicconfig/development-sql.yaml:ro"]
+    depends_on:
+      temporal-postgresql: {condition: service_healthy}
+volumes:
+  postiz-config:
+  postiz-uploads:
+  postgres-volume:
+  redis-data:
+  temporal-postgres:

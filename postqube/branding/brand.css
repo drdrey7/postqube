@@ -1,0 +1,43 @@
+/* Presentation only. The upstream application and data formats remain unchanged. */
+[data-postqube-brand="wordmark"]{width:145px;height:34px;flex-shrink:0;color:inherit}
+[data-postqube-brand="mark"]{flex-shrink:0}
+.postqube-credit{display:block;margin-top:18px;text-align:center;font-size:11px;line-height:1.5;color:#9990aa}
+.postqube-credit a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+
+.postqube-pending{display:block;margin-top:7px;font-size:10px;color:#c4b5fd;line-height:1.3}
+.postqube-instagram-notice{max-width:420px;width:90vw;border:1px solid #6d4ab4;border-radius:18px;padding:28px;background:#191420;color:#f5f3ff;box-shadow:0 24px 80px #0009}
+.postqube-instagram-notice::backdrop{background:#0009;backdrop-filter:blur(4px)}
+.postqube-instagram-notice h2{font-size:21px;font-weight:700;margin:0 0 12px}
+.postqube-instagram-notice p{font-size:15px;line-height:1.6;margin:0 0 22px;color:#d5cde0}
+.postqube-instagram-notice button{background:#7c3aed;border:0;border-radius:9px;padding:10px 18px;color:white;font-weight:600;cursor:pointer}
+
+[data-postqube-brand="wordmark"] text{font-family:inherit;font-weight:750}
+.postqube-hero{min-height:580px;height:100%;box-sizing:border-box;padding:72px 52px;display:flex;flex-direction:column;justify-content:center;border-radius:24px;background:radial-gradient(ellipse at 90% 10%,#7c3aed2b,transparent 60%),#111015;color:#f5f3ff;overflow:hidden}
+.postqube-hero-kicker{font-size:11px;letter-spacing:3px;color:#c4b5fd;font-weight:650;margin-bottom:38px}
+.postqube-hero h2{font-size:clamp(35px,4vw,62px);line-height:1.08;letter-spacing:-2px;font-weight:650;margin:0 0 25px}
+.postqube-hero h2 em{font-style:normal;color:#b89bff}
+.postqube-hero p{max-width:350px;font-size:18px;line-height:1.65;color:#aaa4b7;margin:0 0 38px}
+.postqube-hero-flow{display:flex;gap:12px;align-items:center;margin-bottom:48px}
+.postqube-hero-flow span{padding:14px 16px;border:1px solid #383044;border-radius:11px;background:#211a2c;font-size:13px}
+.postqube-hero-flow b{color:#7d6a99;font-weight:400}
+.postqube-hero-channels{display:flex;flex-wrap:wrap;gap:12px;color:#c7bed6;font-size:12px;line-height:1.5;margin-bottom:24px}
+.postqube-hero-channels span{padding:10px 12px;border:1px solid #33283f;border-radius:9px}
+.postqube-hero-channels b{margin-right:8px;color:#f5f3ff}
+.postqube-hero small{font-size:12px;color:#756c86}
+@media(max-width:800px){.postqube-hero{padding:35px 25px;min-height:420px}.postqube-hero h2{font-size:38px}.postqube-hero-flow{gap:8px}.postqube-hero-flow span{padding:10px}}
+.postqube-submit{flex-direction:column;align-items:stretch}
+.postqube-submit>button{flex:auto;width:100%}
+@media(max-width:800px){
+ [data-postqube-onboarding]{min-width:0;width:100%}
+ [data-postqube-onboarding] div{min-width:0}
+ [data-postqube-onboarding-content]{padding:48px 18px 24px!important}
+ [data-postqube-steps]{gap:8px!important;align-items:flex-start!important}
+ [data-postqube-steps]>div:empty{display:none}
+ [data-postqube-steps]>div:not(:empty){flex:1;flex-direction:column;text-align:center}
+ [data-postqube-steps] span{font-size:11px!important}
+ [data-postqube-onboarding] button:not(.mantine-Modal-close){max-width:100%;white-space:normal;justify-content:center;padding-left:16px;padding-right:16px}
+ [data-postqube-onboarding] .grid-cols-2{grid-template-columns:minmax(0,1fr)}
+ [data-postqube-onboarding] .justify-between{flex-wrap:wrap;gap:16px}
+}
+
+.postqube-source{position:fixed;z-index:20;bottom:3px;right:12px;padding:3px 7px;border-radius:5px;background:#17131de8;color:#bcb3cc;font:10px/1.5 Arial,sans-serif}.postqube-source a{color:inherit;text-decoration:underline;text-underline-offset:2px}@media(max-width:800px){.postqube-source{font-size:9px;right:8px}}

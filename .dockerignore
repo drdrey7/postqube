@@ -21,3 +21,9 @@ dist
 .git
 .github
 reports
+.env
+.env.*
+**/.env
+**/.env.*
+.maintenance-backups
+.postqube-site

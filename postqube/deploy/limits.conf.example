@@ -1,0 +1,2 @@
+map $http_upgrade $postqube_connection { default upgrade; '' close; }
+limit_req_zone $binary_remote_addr zone=postqube_auth:10m rate=20r/m;
