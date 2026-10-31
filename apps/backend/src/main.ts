@@ -72,6 +72,8 @@ async function start() {
   });
 
   app.use('/ideas', json({ limit: '1mb' }));
+  // Scoped parsers can make Nest skip its automatic global JSON parser.
+  app.use(json({ verify: (req, _res, body) => { Object.assign(req, { rawBody: body }); } }));
   app.use(cookieParser());
   app.use(compression());
   app.useGlobalFilters(new SubscriptionExceptionFilter());
