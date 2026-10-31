@@ -7,6 +7,9 @@ on:
     branches: [postqube]
     paths: ['apps/**', 'libraries/**', 'postqube/native/**', '.github/workflows/postqube-native.yml']
   workflow_dispatch:
+concurrency:
+  group: postqube-native-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:

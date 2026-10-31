@@ -16,4 +16,4 @@ COPY apps/frontend/src/components/new-layout/layout.component.tsx apps/frontend/
 COPY apps/frontend/src/app/(app)/(site)/ideas/ apps/frontend/src/app/(app)/(site)/ideas/
 COPY apps/frontend/next.config.js apps/frontend/next.config.js
 COPY postqube/native/migrate-legacy.cjs postqube/native/migrate-legacy.cjs
-RUN NODE_OPTIONS=--max-old-space-size=4096 pnpm --filter postiz-frontend exec next build --webpack
+RUN --mount=type=cache,target=/app/apps/frontend/.next/cache,id=postqube-native-next NODE_OPTIONS=--max-old-space-size=4096 pnpm --filter postiz-frontend exec next build --webpack

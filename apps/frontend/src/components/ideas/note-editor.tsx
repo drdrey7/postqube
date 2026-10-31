@@ -52,7 +52,7 @@ export const NoteEditor = forwardRef<NoteEditorHandle, { initial: IdeaBlock[]; o
     insertTask() { restore(); if (readNote(root.current!).length >= 499) return; document.execCommand('insertHTML', false, taskMarker().outerHTML + '&#8203;'); sync(); },
     normalText() {
       restore(); const caret = getSelection()!.getRangeAt(0).cloneRange(); let task: HTMLElement | null = null;
-      for (const candidate of root.current!.querySelectorAll<HTMLElement>('[data-task]')) {
+      for (const candidate of Array.from(root.current!.querySelectorAll<HTMLElement>('[data-task]'))) {
         const after = document.createRange(); after.setStartAfter(candidate); after.collapse(true);
         if (after.compareBoundaryPoints(Range.START_TO_START, caret) > 0) break;
         const between = document.createRange(); between.setStartAfter(candidate); between.setEnd(caret.startContainer, caret.startOffset);
@@ -78,7 +78,7 @@ export const NoteEditor = forwardRef<NoteEditorHandle, { initial: IdeaBlock[]; o
       let active: Exclude<Token, string> | null = null;
       for (const token of tokens(before.cloneContents())) { if (typeof token !== 'string') active = token; else if (token.includes('\n')) active = null; }
       if (!active) return;
-      const task = [...root.current!.querySelectorAll<HTMLElement>('[data-task]')].find(e => e.dataset.task === active!.id);
+      const task = Array.from(root.current!.querySelectorAll<HTMLElement>('[data-task]')).find(e => e.dataset.task === active!.id);
       const rest = document.createRange(); rest.selectNodeContents(root.current!); if (task) rest.setStartAfter(task);
       let text = ''; for (const token of tokens(rest.cloneContents())) { if (typeof token !== 'string') break; text += token; if (token.includes('\n')) { text = text.split('\n')[0]; break; } }
       event.preventDefault(); if (!text.trim()) { task?.remove(); document.execCommand('insertText', false, '\n'); } else document.execCommand('insertHTML', false, '<br>' + taskMarker().outerHTML + '&#8203;'); sync();
