@@ -20,14 +20,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Build native frontend, backend and Prisma client
-        run: docker build -t postqube:native-ci -f postqube/native/Dockerfile .
-      - name: Test native note serialization
-        run: docker run --rm --entrypoint pnpm -v "$PWD/postqube/native/test:/app/postqube/native/test:ro" postqube:native-ci exec jest --config postqube/native/test/jest.config.cjs --runInBand
-      - name: Export tested image for deployment
-        run: docker save postqube:native-ci | gzip -1 > "$RUNNER_TEMP/postqube-native-image.tar.gz"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: postqube-native-image
-          path: ${{ runner.temp }}/postqube-native-image.tar.gz
-          retention-days: 1
+      - name: Free hosted runner disk for the upstream image
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+      - name: Build native backend and run editor regression tests
+        run: docker buildx build --target native-test --output type=cacheonly -f postqube/native/Dockerfile .
+      - name: Build native frontend and check all route types
+        run: docker buildx build --target dist --output type=cacheonly -f postqube/native/Dockerfile .

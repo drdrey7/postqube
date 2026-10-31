@@ -9,6 +9,11 @@ COPY apps/backend/src/api/api.module.ts apps/backend/src/api/api.module.ts
 COPY apps/backend/src/api/routes/ideas.controller.ts apps/backend/src/api/routes/ideas.controller.ts
 COPY apps/backend/src/main.ts apps/backend/src/main.ts
 RUN NODE_OPTIONS=--max-old-space-size=4096 pnpm --filter postiz-backend build
+FROM native-backend AS native-test
+COPY apps/frontend/src/components/ideas apps/frontend/src/components/ideas
+COPY postqube/native/test postqube/native/test
+RUN pnpm exec jest --config postqube/native/test/jest.config.cjs --runInBand
+
 FROM native-backend AS dist
 COPY apps/frontend/src/components/ideas apps/frontend/src/components/ideas
 COPY apps/frontend/src/components/layout/top.menu.tsx apps/frontend/src/components/layout/top.menu.tsx

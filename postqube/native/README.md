@@ -21,6 +21,11 @@ Build with sufficient memory; the upstream TypeScript graph needs a 4 GB heap.
 Webpack uses a persistent compiler cache and documented memory optimizations.
 Unconfigured Sentry does not generate source maps or instrument the production
 bundle; configuring Sentry requires a build with the public DSN available.
+CI validates the backend/editor tests and complete frontend in cache-only builds,
+without exporting a large runtime image. The Docker exporter behavior is documented
+in [Docker exporters](https://docs.docker.com/build/exporters/#cache-only-export).
+For release reconstruction, pass the recorded runtimeBaseDigest as POSTIZ_BASE.
+
 Production environment is supplied at runtime through the existing protected
 Compose configuration, retaining its private networks, database and uploads.
 
