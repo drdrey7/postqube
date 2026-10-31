@@ -6,6 +6,9 @@ ROOT=Path(__file__).resolve().parents[2];errors=[]
 for p in (ROOT/'scripts/postqube').glob('*.py'):
     ast.parse(p.read_text(),filename=str(p))
 subprocess.run(['node','--check',str(ROOT/'postqube/branding/brand.js')],check=True)
+for p in (ROOT/'postqube/ideas').rglob('*'):
+    if p.suffix in ['.js', '.mjs']:
+        subprocess.run(['node','--check',str(p)],check=True)
 release=json.loads((ROOT/'postqube/release.json').read_text())
 assert release['upstreamTag']=='v2.25.3'
 for p in [ROOT/'README.md',ROOT/'UPSTREAM.md',ROOT/'NOTICE.md',*(ROOT/'docs/postqube').glob('*.md')]:

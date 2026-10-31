@@ -16,6 +16,11 @@ registration form; mobile onboarding/button layout; two-channel pending-Instagra
 presentation; source/license access; deployment templates and documentation.
 No new scheduler, authentication backend, billing engine or AI model was created.
 
+Version postqube-0.2.0-beta.1 adds a Postqube-native Ideas service under
+postqube/ideas: workspace-shared notes/tasks using native upstream authentication.
+It runs separately and uses its own persistent SQLite database; this is new
+Postqube functionality, not an upstream Postiz feature.
+
 The source for the upstream product is in this repository. Postqube runtime
 customizations are under `postqube/`; maintainer helpers under `scripts/postqube/`.
 The original README is retained at `docs/postqube/UPSTREAM-README.md`.
