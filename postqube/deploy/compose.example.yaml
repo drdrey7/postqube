@@ -1,7 +1,7 @@
 # Postqube reference topology. Fresh installs only; do not replace existing volumes.
 services:
   postiz:
-    image: ghcr.io/gitroomhq/postiz-app:v2.25.3
+    image: ${POSTQUBE_IMAGE:-postqube:0.3.0-beta.1}
     restart: unless-stopped
     ports: ["127.0.0.1:4007:5000"]
     environment:

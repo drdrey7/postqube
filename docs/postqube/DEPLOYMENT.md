@@ -3,7 +3,7 @@
 ## Existing test server
 
 Do not replace the current stack with this reference Compose file. Live deployment
-uses /opt/postiz for official app/data configuration, /opt/postqube for branding and
+uses /opt/postiz for native app/data configuration, /opt/postqube for branding and
 host Nginx for public TLS. Preserve existing volume names, secrets and backup jobs.
 The repository includes sanitized examples, not a copy of production environment.
 
@@ -26,7 +26,8 @@ run as a fresh full-stack deployment in this release. It needs an operator smoke
 6. Check the namespace and register the required organizationId/postId Keyword
    search attributes before starting the app. See commands below. Do not create
    demo attributes that consume PostgreSQL visibility's limited attribute slots.
-7. Start postiz. Configure host Nginx, DNS and a trusted certificate, then test
+7. Build and select the matching native Postqube image (see postqube/native/README.md),
+   then start postiz. Configure host Nginx, DNS and a trusted certificate, then test
    authenticated signup, calendar, isolation, media and scheduling.
 8. Copy postqube/branding to /opt/postqube/branding and configure the provided
    site/proxy/limits examples. Replace PUBLIC_IPV4 and postqube.example.com; verify

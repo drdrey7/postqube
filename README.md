@@ -24,7 +24,7 @@ operations files are easy to find. See [provenance and changes](UPSTREAM.md).
 | --- | --- |
 | Email/password signup; optional company | Verified with disposable accounts |
 | Separate workspaces | Verified |
-| Ideas: folders, sections, pages, tasks | Shared within each workspace; new Postqube module |
+| Ideas: folders, sections, pages, tasks | Native page/API, shared within each workspace |
 | Desktop/mobile calendar | Visually checked at 1440×1000 and 390×844 |
 | X connection and native API | Verified; paid live publishing not retested |
 | Instagram image/carousel/Reel/Story support | Native upstream capability; connection not activated |
@@ -72,7 +72,7 @@ conflicts, backups and deployment.
 ```text
 apps/                 Original frontend, backend, orchestrator and other apps
 libraries/            Original shared product code
-postqube/ideas/       Shared notes service, editor, storage and tests
+postqube/native/      Native build, schema and legacy migration instructions
 postqube/branding/    Postqube UI customization and original SVG assets
 postqube/deploy/      Sanitized configuration examples, not live credentials
 postqube/release.json Exact release/upstream/runtime provenance

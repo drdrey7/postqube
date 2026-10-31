@@ -1,31 +1,22 @@
 # Architecture
 
-The full Postiz source is preserved: Next.js frontend, NestJS backend, Prisma /
-PostgreSQL, Redis and Temporal orchestration. Postqube does not replace the scheduler.
+The Postqube distribution preserves upstream Postiz and builds tracked native
+changes: Next.js frontend, NestJS backend, Prisma/PostgreSQL, Redis and Temporal.
+Its publishing scheduler remains upstream. Nginx terminates HTTPS and proxies to
+127.0.0.1:4007; data services remain on private Docker networks.
 
-The documented runtime uses official Postiz v2.25.3 plus a host Nginx presentation
-layer. Nginx terminates HTTPS and proxies to 127.0.0.1:4007. Databases, Redis and
-Temporal stay private. Public media must be reachable for social provider ingestion.
+Ideas is a native route under the existing site layout. The existing MenuItem/Next
+Link performs client navigation and retains the layout. Its workspace/editor are
+React components using original theme tokens/font, without iframe or copied shell.
+The native Nest controller uses the same AuthMiddleware as the rest of the API.
+Prisma IdeaItem records relate to Organization with composite parent/tenant
+constraints. Standard PostgreSQL backups cover them.
 
-Branding source lives in postqube/branding. Nginx injects its JS/CSS after app
-hydration. This keeps the official image intact but depends on upstream selectors;
-UI changes require review after updates. The optional-company adapter uses the
-normal form; authentication remains native. This separation is not an AGPL exception.
+Brand presentation assets remain under postqube/branding. Their existing overlay
+changes branding/onboarding only; it no longer implements Ideas navigation,
+page rendering, menu insertion or theme propagation. Upstream selectors used by
+that presentation layer still need review after updates.
 
-The host uses SQL Temporal visibility without Elasticsearch. Required search
-attributes organizationId and postId are registered before scheduling is tested.
-Existing production data volumes must never be replaced by a fresh Compose project.
-
-## Ideas workspace service
-
-The original Postqube Ideas module runs separately on Node with SQLite, behind
-/ideas/ on the same HTTPS origin. Its private data volume is separate from Postiz.
-Every request uses native session/workspace verification; no second identity system
-or signing secret is introduced. Revision checks protect simultaneous edits. See
-[Ideas](IDEAS.md) for team access, recovery and deletion limitations.
-
-Ideas opens within the actual native layout at /launches?view=ideas. Its editor
-frame (/ideas/editor/) occupies the content slot; native navigation, workspace
-selector, theme, language and notifications remain mounted. The surface inherits
-real theme variables and self-hosted font faces, instead of maintaining copied
-chrome. Host selectors are covered by browser regression checks after upgrades.
+Native distribution build/migration instructions are in postqube/native/README.md.
+Never replace existing databases/uploads with new empty Compose volumes. Temporal
+visibility uses SQL; organizationId and postId search attributes remain registered.

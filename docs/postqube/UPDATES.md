@@ -5,6 +5,8 @@
 3. Create a maintenance branch from postqube; merge the selected upstream tag.
 4. Resolve conflicts explicitly; retain LICENSE/notices and Postqube changes.
 5. Review dependencies, third-party licenses, Compose and database migrations.
+   Rebuild native frontend/backend/Prisma from the merged source; retain Ideas route,
+   native menu, authenticated controller and workspace data model.
 6. Test in staging: signup/login, permissions, two-channel picker, media, calendar,
    drafts, scheduling and provider-specific delivery with approved test content.
 7. Take a recoverable backup before deployment and tag the exact source release.
@@ -16,5 +18,6 @@ Security fixes should not be postponed indefinitely for cosmetic preferences.
 
 The legacy helper scripts/postqube/update-official.py operates on /opt/postiz and
 updates the official image, not this source repository. It is explicit maintenance,
-not automatic deployment. Configure its readiness URL before using it. Future
-releases must keep the deployed source link matched to the actual overlay version.
+not automatic deployment. Do not use it to replace a native Postqube image: that
+would remove tracked application changes. Build the native release from merged
+source and keep the deployed source link matched to that image.

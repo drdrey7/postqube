@@ -31,3 +31,8 @@ configuration. No live operator environment or private X Dash history was import
 Version postqube-0.2.0-beta.2 integrates Ideas into the existing application shell,
 adds independent column minimization and a continuous editor with inline task
 markers. The stored block representation remains backward compatible.
+
+Version postqube-0.3.0-beta.1 replaces the Ideas frame/overlay/service with a native
+Next.js route, React workspace/editor, original MenuItem navigation, authenticated
+Nest controller and PostgreSQL/Prisma IdeaItem model. Legacy notes migrate with
+field-by-field verification; native frontend/backend/client are rebuilt.

@@ -6,9 +6,7 @@ ROOT=Path(__file__).resolve().parents[2];errors=[]
 for p in (ROOT/'scripts/postqube').glob('*.py'):
     ast.parse(p.read_text(),filename=str(p))
 subprocess.run(['node','--check',str(ROOT/'postqube/branding/brand.js')],check=True)
-for p in (ROOT/'postqube/ideas').rglob('*'):
-    if p.suffix in ['.js', '.mjs']:
-        subprocess.run(['node','--check',str(p)],check=True)
+subprocess.run(['node','--check',str(ROOT/'postqube/native/migrate-legacy.cjs')],check=True)
 release=json.loads((ROOT/'postqube/release.json').read_text())
 assert release['upstreamTag']=='v2.25.3'
 for p in [ROOT/'README.md',ROOT/'UPSTREAM.md',ROOT/'NOTICE.md',*(ROOT/'docs/postqube').glob('*.md')]:
@@ -20,7 +18,7 @@ for p in [ROOT/'README.md',ROOT/'UPSTREAM.md',ROOT/'NOTICE.md',*(ROOT/'docs/post
         if not target.exists():errors.append(f'{p.relative_to(ROOT)}: missing local link {url}')
 # Block common live credential formats in newly maintained text; never emit matches.
 patterns=[r'gh[pousr]_[A-Za-z0-9]{30,}',r'github_pat_[A-Za-z0-9_]{30,}',r'sk-(?:proj-)?[A-Za-z0-9_-]{24,}',r'-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----']
-for parent in [ROOT/'postqube',ROOT/'scripts/postqube',ROOT/'docs/postqube']:
+for parent in [ROOT/'postqube',ROOT/'scripts/postqube',ROOT/'docs/postqube',ROOT/'apps/frontend/src/components/ideas']:
     for p in parent.rglob('*'):
         if not p.is_file() or p.suffix.lower() in ['.png','.jpg','.ico']:continue
         if p.name.startswith('.env') and p.name!='.env.example':errors.append('Real environment file in maintained source')

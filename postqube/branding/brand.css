@@ -41,12 +41,3 @@
 }
 
 .postqube-source{position:fixed;z-index:20;bottom:3px;right:12px;padding:3px 7px;border-radius:5px;background:#17131de8;color:#bcb3cc;font:10px/1.5 Arial,sans-serif}.postqube-source a{color:inherit;text-decoration:underline;text-underline-offset:2px}@media(max-width:800px){.postqube-source{font-size:9px;right:8px}}
-
-/* Native shell remains mounted: sidebar, workspace selector, theme and notifications. */
-[data-postqube-ideas-layout]{height:100dvh;min-height:0!important;padding-bottom:12px!important}
-[data-postqube-ideas-content]{min-height:0;position:relative;overflow:hidden}
-[data-postqube-ideas-content]>:not(#postqube-ideas-frame){display:none!important}
-#postqube-ideas-frame{display:block;width:100%;height:100%;min-height:0;flex:1;border:0;background:var(--new-bgColorInner)}
-.postqube-ideas-active{background:var(--new-boxFocused)!important;color:var(--new-textItemFocused)!important}
-body:has(#postqube-ideas-frame) #left-menu a[href="/launches"]{background:transparent!important;color:var(--new-textItemBlur)!important}
-@media(max-width:800px){[data-postqube-ideas-layout]{padding-bottom:8px!important}}

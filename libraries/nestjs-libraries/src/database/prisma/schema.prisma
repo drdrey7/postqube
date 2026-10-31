@@ -9,6 +9,7 @@ datasource db {
 }
 
 model Organization {
+  ideas               IdeaItem[]
   id                  String               @id @default(uuid())
   name                String
   description         String?
@@ -1838,4 +1839,24 @@ model Announcement {
   description String
   color       AnnouncementColor @default(INFO)
   createdAt   DateTime          @default(now())
+}
+
+// Postqube shared workspace notes. Parent references enforce tenant isolation.
+model IdeaItem {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  kind           String
+  parentId       String?
+  parent         IdeaItem?    @relation("IdeaHierarchy", fields: [parentId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  children       IdeaItem[]   @relation("IdeaHierarchy")
+  title          String
+  blocks         Json         @default("[]")
+  revision       Int          @default(1)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  @@unique([id, organizationId])
+  @@index([organizationId, kind, parentId, deletedAt])
 }

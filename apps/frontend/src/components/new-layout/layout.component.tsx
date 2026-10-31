@@ -102,7 +102,8 @@ export const LayoutComponent = ({ children }: { children: ReactNode }) => {
             <div
               className={clsx(
                 'flex flex-col min-h-screen min-w-screen text-newTextColor p-[12px] mobile:p-[8px] mobile:pb-[80px]',
-                jakartaSans.className
+                jakartaSans.className,
+                pathname.startsWith('/ideas') && 'h-dvh !min-h-0 mobile:!pb-[8px]'
               )}
             >
               <div>{user?.admin ? <Impersonate /> : <div />}</div>

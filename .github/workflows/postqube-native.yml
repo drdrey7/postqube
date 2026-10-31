@@ -1,0 +1,28 @@
+name: Postqube native build
+on:
+  pull_request:
+    branches: [postqube]
+    paths: ['apps/**', 'libraries/**', 'postqube/native/**', '.github/workflows/postqube-native.yml']
+  push:
+    branches: [postqube]
+    paths: ['apps/**', 'libraries/**', 'postqube/native/**', '.github/workflows/postqube-native.yml']
+  workflow_dispatch:
+concurrency:
+  group: postqube-native-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  native-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Free hosted runner disk for the upstream image
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+      - name: Build native backend and run editor regression tests
+        run: docker buildx build --target native-test --output type=cacheonly -f postqube/native/Dockerfile .
+      - name: Build native frontend and check all route types
+        run: docker buildx build --target dist --output type=cacheonly -f postqube/native/Dockerfile .
