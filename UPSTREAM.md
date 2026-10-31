@@ -27,3 +27,7 @@ The original README is retained at `docs/postqube/UPSTREAM-README.md`.
 
 Git history may contain upstream authors' existing public contact details and sample
 configuration. No live operator environment or private X Dash history was imported.
+
+Version postqube-0.2.0-beta.2 integrates Ideas into the existing application shell,
+adds independent column minimization and a continuous editor with inline task
+markers. The stored block representation remains backward compatible.

@@ -72,39 +72,72 @@
     state.dirty = true; state.serial++; rememberDraft(); stats();
     if (!state.conflict) { status('pending', 'Por guardar…'); clearTimeout(state.timer); state.timer = setTimeout(() => save(), 750); }
   }
-  function rowFor(block) {
-    const row = document.createElement('div'); row.className = 'block' + (block.type === 'task' && block.done ? ' done' : ''); row.dataset.block = block.id;
-    if (block.type === 'task') {
-      const check = document.createElement('button'); check.type = 'button'; check.className = 'task-toggle'; check.textContent = '✓'; check.setAttribute('aria-pressed', String(block.done)); check.setAttribute('aria-label', block.done ? 'Marcar tarefa como não concluída' : 'Marcar tarefa como feita');
-      check.addEventListener('click', () => { block.done = !block.done; check.setAttribute('aria-pressed', String(block.done)); check.setAttribute('aria-label', block.done ? 'Marcar tarefa como não concluída' : 'Marcar tarefa como feita'); row.classList.toggle('done', block.done); changed(); }); row.append(check);
-    }
-    const field = document.createElement('textarea'); field.rows = 1; field.value = block.text; field.maxLength = 50000; field.placeholder = block.type === 'task' ? 'O que queres fazer?' : 'Escreve uma ideia, um rascunho, o início de qualquer coisa…'; field.setAttribute('aria-label', block.type === 'task' ? 'Texto da tarefa' : 'Texto da ideia');
-    field.addEventListener('input', () => { block.text = field.value; resize(field); changed(); });
-    field.addEventListener('keydown', event => {
-      if (event.key === 'Enter' && block.type === 'task' && !event.shiftKey) { event.preventDefault(); addBlock('task', block.id); }
-      if (event.key === 'Backspace' && !field.value && state.page.blocks.length > 1) { event.preventDefault(); removeBlock(block.id); }
-    });
-    const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'block-remove'; remove.textContent = '×'; remove.title = 'Remover bloco'; remove.setAttribute('aria-label', 'Remover bloco'); remove.addEventListener('click', () => { if (!block.text || confirm('Remover este bloco de texto?')) removeBlock(block.id); });
-    row.append(field, remove); requestAnimationFrame(() => resize(field)); return row;
+  // One continuous, plain-text editor. Task markers are inline non-editable controls.
+  // Stored text never becomes HTML. Legacy block notes are displayed without migration.
+  let noteSelection = null;
+  function marker(done = false) {
+    const e = document.createElement('span'); e.className = 'inline-task';
+    e.contentEditable = 'false'; e.dataset.task = crypto.randomUUID();
+    e.dataset.done = String(done); e.setAttribute('role', 'checkbox');
+    e.setAttribute('aria-checked', String(done)); e.setAttribute('tabindex', '0');
+    e.setAttribute('aria-label', 'Tarefa concluída'); e.textContent = '✓'; return e;
   }
+  function editorTokens(root = $('blocks')) {
+    const tokens = [];
+    function walk(node) {
+      if (node.nodeType === Node.TEXT_NODE) { tokens.push(node.nodeValue.replace(/\u200b/g, '')); return; }
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+      if (node.matches('[data-task]')) { tokens.push({ done: node.dataset.done === 'true', id: node.dataset.task }); return; }
+      if (node.tagName === 'BR') { if (node.parentElement.childNodes.length !== 1 || node.parentElement === root) tokens.push('\n'); return; }
+      const line = /^(DIV|P|LI)$/.test(node.tagName);
+      if (line && (tokens.length || node.previousSibling)) tokens.push('\n');
+      for (const child of node.childNodes) walk(child);
+    }
+    for (const child of root.childNodes) walk(child);
+    return tokens;
+  }
+  function readEditor() {
+    const blocks = []; let current = { id: crypto.randomUUID(), type: 'text', text: '', inline: true };
+    const flush = () => { if (current.text || current.type === 'task') blocks.push(current); };
+    for (const token of editorTokens()) {
+      if (typeof token !== 'string') { flush(); current = { id: crypto.randomUUID(), type: 'task', text: '', done: token.done, inline: true }; }
+      else if (current.type === 'task' && token.includes('\n')) {
+        const at = token.indexOf('\n'); current.text += token.slice(0, at); flush();
+        current = { id: crypto.randomUUID(), type: 'text', text: token.slice(at), inline: true };
+      } else current.text += token;
+    }
+    flush();
+    return blocks.length ? blocks : [{ id: crypto.randomUUID(), type: 'text', text: '', inline: true }];
+  }
+  function captureSelection() {
+    const selection = getSelection();
+    if (selection.rangeCount && $('blocks').contains(selection.anchorNode) && $('blocks').contains(selection.focusNode)) noteSelection = selection.getRangeAt(0).cloneRange();
+  }
+  function restoreSelection() {
+    $('blocks').focus(); const selection = getSelection(); selection.removeAllRanges();
+    if (noteSelection && $('blocks').contains(noteSelection.startContainer)) selection.addRange(noteSelection);
+    else { const range = document.createRange(); range.selectNodeContents($('blocks')); range.collapse(false); selection.addRange(range); }
+  }
+  function syncEditor() { if (!state.page) return; state.page.blocks = readEditor(); changed(); captureSelection(); }
   function renderEditor() {
     const exists = !!state.page; $('note').hidden = !exists; $('note-toolbar').hidden = !exists; $('empty-editor').hidden = exists; $('conflict-banner').hidden = !state.conflict;
-    if (!exists) { $('blocks').replaceChildren(); $('note-title').value = ''; stats(); return; }
-    $('note-title').value = state.page.title; requestAnimationFrame(() => resize($('note-title'))); $('note-date').textContent = new Date(state.page.created_at).toLocaleDateString('pt-PT', { day: 'numeric', month: 'long' });
-    $('blocks').replaceChildren(...state.page.blocks.map(rowFor)); stats(); syncControls();
+    noteSelection = null; $('blocks').replaceChildren();
+    if (!exists) { $('note-title').value = ''; stats(); return; }
+    $('note-title').value = state.page.title; requestAnimationFrame(() => resize($('note-title')));
+    $('note-date').textContent = new Date(state.page.created_at).toLocaleDateString('pt-PT', { day: 'numeric', month: 'long' });
+    state.page.blocks.forEach((block, index) => {
+      if (index && !block.inline) $('blocks').append(document.createTextNode('\n'));
+      if (block.type === 'task') $('blocks').append(marker(block.done));
+      $('blocks').append(document.createTextNode(block.text));
+    }); stats(); syncControls();
   }
-  function addBlock(type, afterId) {
+  function insertTask() {
     if (!state.page) return;
-    if (state.page.blocks.length >= 500) return toast('A página pode ter até 500 blocos.');
-    const block = { id: crypto.randomUUID(), type, text: '', ...(type === 'task' ? { done: false } : {}) };
-    const index = afterId ? state.page.blocks.findIndex(b => b.id === afterId) + 1 : state.page.blocks.length;
-    state.page.blocks.splice(index, 0, block); renderEditor(); changed();
-    const row = document.querySelector(`[data-block="${block.id}"] textarea`); row?.focus(); row?.scrollIntoView({ block: 'nearest' });
-  }
-  function removeBlock(id) {
-    const index = state.page.blocks.findIndex(b => b.id === id); state.page.blocks.splice(index, 1);
-    if (!state.page.blocks.length) state.page.blocks.push({ id: crypto.randomUUID(), type: 'text', text: '' });
-    renderEditor(); changed(); document.querySelectorAll('#blocks textarea')[Math.max(0, index - 1)]?.focus();
+    if (state.page.blocks.length >= 499) return toast('Esta página atingiu o limite de tarefas.');
+    restoreSelection();
+    // Static, generated marker only; execCommand keeps insertion in native undo history.
+    const e = marker(); document.execCommand('insertHTML', false, e.outerHTML + '&#8203;');
+    syncEditor();
   }
   async function save() {
     clearTimeout(state.timer);
@@ -227,9 +260,93 @@
   }
   $('note-title').addEventListener('input', () => { if (!state.page) return; state.page.title = $('note-title').value.replace(/\n/g, ' '); resize($('note-title')); changed(); renderLists(); });
   $('page-search').addEventListener('input', () => { state.query = $('page-search').value; renderLists(); });
-  $('add-text').addEventListener('click', () => addBlock('text'));
-  $('append-block').addEventListener('click', () => addBlock('text'));
-  $('add-task').addEventListener('click', () => addBlock('task'));
+  for (const id of ['add-text', 'add-task']) $(id).addEventListener('mousedown', e => e.preventDefault());
+  $('add-task').addEventListener('click', insertTask);
+  $('add-text').addEventListener('click', () => {
+    if (!state.page) return; restoreSelection();
+    const range = getSelection().getRangeAt(0), caret = range.cloneRange();
+    let task = null;
+    for (const candidate of $('blocks').querySelectorAll('[data-task]')) {
+      const after = document.createRange(); after.setStartAfter(candidate); after.collapse(true);
+      if (after.compareBoundaryPoints(Range.START_TO_START, range) > 0) break;
+      const between = document.createRange(); between.setStartAfter(candidate); between.setEnd(range.startContainer, range.startOffset);
+      if (!editorTokens(between.cloneContents()).some(t => typeof t === 'string' && t.includes('\n'))) task = candidate;
+    }
+    if (task) {
+      const remove = document.createRange(); remove.selectNode(task); const selection = getSelection(); selection.removeAllRanges(); selection.addRange(remove);
+      document.execCommand('delete'); selection.removeAllRanges(); selection.addRange(caret); syncEditor();
+    }
+
+  });
+  $('blocks').addEventListener('input', syncEditor);
+  $('blocks').addEventListener('beforeinput', event => { if (event.inputType.startsWith('format')) event.preventDefault(); });
+  $('blocks').addEventListener('keyup', captureSelection);
+  $('blocks').addEventListener('mouseup', captureSelection);
+  document.addEventListener('selectionchange', captureSelection);
+  $('blocks').addEventListener('paste', event => {
+    event.preventDefault(); const text = event.clipboardData.getData('text/plain');
+    document.execCommand('insertText', false, text); syncEditor();
+  });
+  function toggleTask(event) {
+    const task = event.target.closest('[data-task]'); if (!task) return;
+    event.preventDefault(); task.dataset.done = String(task.dataset.done !== 'true');
+    task.setAttribute('aria-checked', task.dataset.done); syncEditor();
+  }
+  $('blocks').addEventListener('click', toggleTask);
+  $('blocks').addEventListener('keydown', event => {
+    if (event.target.matches('[data-task]') && [' ', 'Enter'].includes(event.key)) return toggleTask(event);
+    if (event.key !== 'Enter' || event.shiftKey || event.isComposing) return;
+    const selection = getSelection(); if (!selection.rangeCount || !selection.isCollapsed) return;
+    const cursor = selection.getRangeAt(0), before = cursor.cloneRange(); before.selectNodeContents($('blocks')); before.setEnd(cursor.startContainer, cursor.startOffset);
+    let active = null;
+    for (const token of editorTokens(before.cloneContents())) {
+      if (typeof token !== 'string') { active = token; }
+      else if (token.includes('\n')) { active = null; }
+    }
+    if (!active) return;
+    event.preventDefault();
+    const task = [...$('blocks').querySelectorAll('[data-task]')].find(e => e.dataset.task === active.id);
+    const rest = document.createRange(); rest.selectNodeContents($('blocks')); if (task) rest.setStartAfter(task);
+    let whole = ''; for (const token of editorTokens(rest.cloneContents())) { if (typeof token !== 'string') break; whole += token; if (token.includes('\n')) { whole = whole.split('\n')[0]; break; } }
+    if (!whole.trim()) {
+      task?.remove(); document.execCommand('insertText', false, '\n');
+    } else document.execCommand('insertHTML', false, '<br>' + marker().outerHTML + '&#8203;');
+    syncEditor();
+  });
+  for (const button of document.querySelectorAll('[data-collapse]')) {
+    const key = button.dataset.collapse;
+    try { if (localStorage.getItem('postqube-ideas-collapse-' + key) === 'true') document.body.dataset[key + 'Collapsed'] = 'true'; } catch {}
+    const update = () => { const collapsed = document.body.dataset[key + 'Collapsed'] === 'true'; button.setAttribute('aria-expanded', String(!collapsed)); button.setAttribute('aria-label', (collapsed ? 'Expandir ' : 'Minimizar ') + labels[key]); button.title = button.getAttribute('aria-label'); };
+    update(); button.addEventListener('click', () => {
+      const value = String(document.body.dataset[key + 'Collapsed'] !== 'true'); document.body.dataset[key + 'Collapsed'] = value;
+      try { localStorage.setItem('postqube-ideas-collapse-' + key, value); } catch {} update();
+    });
+  }
+  // Inherit actual app tokens and font; the native theme control stays in the host header.
+  function syncTheme() {
+    if (parent === window) return;
+    try {
+      const host = parent.document.body, css = parent.getComputedStyle(host);
+      for (let i = 0; i < css.length; i++) { const name = css[i]; if (name.startsWith('--new-')) document.documentElement.style.setProperty(name, css.getPropertyValue(name)); }
+      const shell = parent.document.querySelector('.blurMe.bg-newBgLineColor');
+      document.body.style.fontFamily = parent.getComputedStyle(shell || host).fontFamily;
+      document.documentElement.dataset.theme = host.classList.contains('light') ? 'light' : 'dark';
+    } catch {}
+  }
+  // Reuse the host's self-hosted font faces, including their original absolute URLs.
+  if (parent !== window) {
+    try {
+      const rules = [];
+      for (const sheet of parent.document.styleSheets) {
+        try { for (const rule of sheet.cssRules) if (rule.type === CSSRule.FONT_FACE_RULE) rules.push(rule.cssText.replace(/url\(["']?([^"')]+)["']?\)/g, (_, url) => 'url("' + new URL(url, sheet.href || parent.location.href).href + '")')); } catch {}
+      }
+      const fonts = new CSSStyleSheet(); fonts.replaceSync(rules.join('\n'));
+      document.adoptedStyleSheets = [...document.adoptedStyleSheets, fonts];
+    } catch {}
+  }
+  syncTheme();
+  if (parent !== window) { try { new MutationObserver(syncTheme).observe(parent.document.body, { attributes: true, attributeFilter: ['class'] }); } catch {} }
+
   $('note-menu').addEventListener('click', () => state.page && itemOptions('pages', state.page));
   $('start-button').addEventListener('click', () => nameDialog(state.section ? 'pages' : state.folder ? 'sections' : 'folders'));
   $('name-form').addEventListener('submit', submitName);
@@ -241,7 +358,7 @@
   for (const button of document.querySelectorAll('[data-create]')) button.addEventListener('click', () => nameDialog(button.dataset.create));
   for (const button of document.querySelectorAll('button[data-view]')) button.addEventListener('click', () => setView(button.dataset.view));
   for (const button of document.querySelectorAll('.dialog-close,.dialog-cancel')) button.addEventListener('click', () => button.closest('dialog').close());
-  $('conflict-copy').addEventListener('click', async () => { try { await navigator.clipboard.writeText(state.page.title + '\n\n' + state.page.blocks.map(b => (b.type === 'task' ? (b.done ? '[x] ' : '[ ] ') : '') + b.text).join('\n')); toast('Texto copiado.'); } catch { toast('Seleciona e copia o texto no editor.'); } });
+  $('conflict-copy').addEventListener('click', async () => { try { await navigator.clipboard.writeText(state.page.title + '\n\n' + state.page.blocks.map((b, i) => (i && !b.inline ? '\n' : '') + (b.type === 'task' ? (b.done ? '[x] ' : '[ ] ') : '') + b.text).join('')); toast('Texto copiado.'); } catch { toast('Seleciona e copia o texto no editor.'); } });
   $('conflict-reload').addEventListener('click', async () => { if (!confirm('Abrir a versão mais recente? Copia o teu texto ou guarda-o numa nova página antes de continuar.')) return; const id = state.page.id; forgetDraft(id); state.dirty = false; state.conflict = false; await openPage(id, { force: true }); });
   $('conflict-save-copy').addEventListener('click', async () => {
     try {

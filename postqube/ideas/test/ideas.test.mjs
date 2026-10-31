@@ -26,7 +26,7 @@ test('text and task state persist; revision rejects silent overwrite', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'ideas-test-')); const db = path.join(dir, 'notes.sqlite'); let s = new IdeasStore(db);
   try {
     const { page } = chain(s);
-    const blocks = [{ id: 'text-1', type: 'text', text: '<script>alert(1)</script>\nUma ideia' }, { id: 'task-1', type: 'task', text: 'Preparar carrossel', done: true }];
+    const blocks = [{ id: 'text-1', type: 'text', text: '<script>alert(1)</script>\nUma ideia' }, { id: 'task-1', type: 'task', text: 'Preparar carrossel', done: true, inline: true }, { id: 'tail-1', type: 'text', text: '\nPróxima linha', inline: true }];
     const saved = s.update('org-a', 'pages', page.id, { revision: 1, title: 'Um rascunho', blocks });
     assert.equal(saved.revision, 2); assert.deepEqual(saved.blocks, blocks);
     assert.throws(() => s.update('org-a', 'pages', page.id, { revision: 1, blocks: [] }), e => e.status === 409);
@@ -77,7 +77,8 @@ test('HTTP reuses verified identity, enforces mutation Origin, protects notes an
     assert.equal((await req('folders/' + f.id, 'DELETE', undefined, 'other')).status, 404);
     assert.equal((await req('pages/' + page.id, 'PATCH', { revision: 0, title: 'Overwrite' })).status, 409);
     const tree = await (await req('tree')).json(); assert.equal(tree.scope, 'workspace'); assert.equal(tree.pages.length, 1); assert.equal(tree.viewerId, 'member-one');
-    const html = await fetch(base + '/ideas/'); assert.equal(html.status, 200); assert.match(html.headers.get('content-security-policy'), /script-src 'self'/);
+    const entry = await fetch(base + '/ideas/', {redirect:'manual'}); assert.equal(entry.status, 308); assert.equal(entry.headers.get('location'), '/launches?view=ideas');
+    const html = await fetch(base + '/ideas/editor/'); assert.equal(html.status, 200); assert.match(html.headers.get('content-security-policy'), /script-src 'self'/);
     assert.equal((await fetch(base + '/ideas/api/../../store.mjs')).status, 404);
   } finally { await new Promise(resolve => server.close(resolve)); store.close(); }
 });
