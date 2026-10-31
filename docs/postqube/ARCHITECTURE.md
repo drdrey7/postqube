@@ -15,3 +15,11 @@ normal form; authentication remains native. This separation is not an AGPL excep
 The host uses SQL Temporal visibility without Elasticsearch. Required search
 attributes organizationId and postId are registered before scheduling is tested.
 Existing production data volumes must never be replaced by a fresh Compose project.
+
+## Ideas workspace service
+
+The original Postqube Ideas module runs separately on Node with SQLite, behind
+/ideas/ on the same HTTPS origin. Its private data volume is separate from Postiz.
+Every request uses native session/workspace verification; no second identity system
+or signing secret is introduced. Revision checks protect simultaneous edits. See
+[Ideas](IDEAS.md) for team access, recovery and deletion limitations.

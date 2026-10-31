@@ -1,0 +1,70 @@
+# Ideias — shared workspace notes
+
+Postqube-specific functionality, available at /ideas/. It does not publish posts.
+
+![Ideas desktop in a disposable demonstration workspace](assets/ideas-desktop.png)
+
+![Ideas mobile editor with circular task checkboxes](assets/ideas-mobile.png)
+
+Screenshots use disposable demonstration content, never customer notes.
+
+## Organize from left to right
+
+Folders → Sections → Pages → Editor. Use + in each column to create an item, then
+select it to continue. A page supports free text and circular task checkboxes.
+Click a circle to mark a task done; click again to reopen it. The task text is
+crossed out but retained. Enter inside a task creates the next task; Shift+Enter
+adds a line inside the same task. The text toolbar adds ordinary text blocks.
+
+On mobile, the bottom navigation switches between the four levels rather than
+squeezing four narrow columns onto the screen. Rename items through their ⋯ menu.
+Trash hides an item and its descendants; it can be restored from the trash panel.
+Restore parents before children where necessary. No permanent-delete UI is provided.
+
+## Teams and privacy
+
+Ideas belong to the current native Postiz workspace, not one user. Every active
+member of that workspace can read/edit them, including ordinary team members.
+Different workspaces are isolated. Add people through /settings?tab=teams; the
+existing invitation flow still depends on email setup. This feature does not bypass
+invitation delivery, invent new roles or grant global administration.
+
+Every API request verifies the existing session and current workspace through
+native /api/user/self. The browser cannot choose a different organization in an
+Ideas payload. The service never reads the Postiz DB or receives a JWT signing key.
+
+## Saving and simultaneous edits
+
+Autosave runs shortly after typing. Wait for Guardado before closing. Network or
+session failures leave text in the editor and a tab-local recovery draft. This is
+not a substitute for backups. Shared devices should not retain open signed-in tabs.
+A stale revision is rejected with 409: the editor keeps the local text and offers
+copy, save as a new page, or open the current server version. No silent last-writer
+wins and no real-time collaborative cursor editing are claimed.
+
+## Deployment and backup
+
+Service source: postqube/ideas, Node 22.23.4 with built-in SQLite; no npm runtime
+dependencies. The official Postiz image remains unchanged. Mount /data persistently,
+run non-root and expose only 127.0.0.1:4018 behind the same HTTPS origin.
+Set PUBLIC_URL and POSTIZ_NETWORK to match the deployment. Keep native cookie
+scope correct; do not enable a test authentication bypass.
+
+Copy the folder to /opt/postqube/ideas, create /var/lib/postqube-ideas owned by
+container UID/GID 1000, then run its Compose file with PUBLIC_URL set. Add the
+/ideas Nginx routes from postqube/deploy/site.conf.example and verify nginx -t.
+
+For a consistent backup, execute backup.mjs inside the service with a new absolute
+filename under /data. It uses SQLite VACUUM INTO, so committed WAL data is included.
+Protect and copy that snapshot into the regular encrypted/off-server backup set;
+restore into an isolated test service before trusting recovery. Do not copy only
+ideas.sqlite while WAL writes are active. Include this source version/config.
+
+Tests: node --test postqube/ideas/test/ideas.test.mjs covers persistence, shared
+workspace access, cross-workspace denial, validation, revision conflicts, trash
+and consistent backup. UI checks additionally exercise actual native sessions.
+
+Retention/account deletion: workspace Ideas are a separate persistent store.
+Deleting a native Postiz account does not automatically erase shared Ideas or its
+workspace's archive. Final operator privacy/deletion procedure must cover this
+store and backup retention before commercial launch.

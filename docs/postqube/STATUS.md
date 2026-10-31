@@ -9,6 +9,7 @@ Snapshot: 2026-10-31. This page is a release note, not live monitoring.
 | Owner administration | Native access verified |
 | X OAuth and workspace API | Verified; end-to-end paid publishing test outstanding |
 | Instagram | Meta app created; portfolio/2FA restriction unresolved |
+| Shared Ideas, task checkboxes and mobile layout | Implemented; disposable-account checks passed |
 | Transactional email | Not configured |
 | In-app AI | Not configured |
 | Payments | Off |

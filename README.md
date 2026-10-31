@@ -24,6 +24,7 @@ operations files are easy to find. See [provenance and changes](UPSTREAM.md).
 | --- | --- |
 | Email/password signup; optional company | Verified with disposable accounts |
 | Separate workspaces | Verified |
+| Ideas: folders, sections, pages, tasks | Shared within each workspace; new Postqube module |
 | Desktop/mobile calendar | Visually checked at 1440×1000 and 390×844 |
 | X connection and native API | Verified; paid live publishing not retested |
 | Instagram image/carousel/Reel/Story support | Native upstream capability; connection not activated |
@@ -36,6 +37,7 @@ operations files are easy to find. See [provenance and changes](UPSTREAM.md).
 
 ## Start here
 
+- **Organize ideas:** [Ideas workspace](docs/postqube/IDEAS.md)
 - **Use it:** [Getting started](docs/postqube/GETTING-STARTED.md) · [User guide](docs/postqube/USER-GUIDE.md)
 - **Operate it:** [Deployment](docs/postqube/DEPLOYMENT.md) · [Backups and recovery](docs/postqube/OPERATIONS.md)
 - **Connect channels:** [X and Instagram](docs/postqube/CHANNELS.md)
@@ -55,11 +57,22 @@ Open http://localhost:8088. This serves documentation only, not the application.
 For the application, follow [Deployment](docs/postqube/DEPLOYMENT.md). Do not run
 the root upstream Compose file unchanged as a hardened public deployment.
 
+## Ideas for your team
+
+Folders → Sections → Pages → Editor, with text, circular task checkboxes and
+autosave. Shared with current workspace members, with separate workspaces isolated.
+
+![Ideas desktop — disposable demonstration content](docs/postqube/assets/ideas-desktop.png)
+
+Read the [Ideas guide](docs/postqube/IDEAS.md) for mobile navigation, collaboration
+conflicts, backups and deployment.
+
 ## Repository map
 
 ```text
 apps/                 Original frontend, backend, orchestrator and other apps
 libraries/            Original shared product code
+postqube/ideas/       Shared notes service, editor, storage and tests
 postqube/branding/    Postqube UI customization and original SVG assets
 postqube/deploy/      Sanitized configuration examples, not live credentials
 postqube/release.json Exact release/upstream/runtime provenance
