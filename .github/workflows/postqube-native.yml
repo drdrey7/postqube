@@ -23,6 +23,8 @@ jobs:
       - name: Free hosted runner disk for the upstream image
         run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
       - uses: docker/setup-buildx-action@v3
+      # Inline buildx needs the Actions cache URL/token for type=gha (docs.docker.com/build/cache/backends/gha).
+      - uses: crazy-max/ghaction-github-runtime@v3
       - name: Build native backend and run editor regression tests
         run: docker buildx build --target native-test --output type=cacheonly --cache-from type=gha,scope=postqube-native --cache-from type=gha,scope=postqube-test -f postqube/native/Dockerfile .
       - name: Build native frontend and check all route types
