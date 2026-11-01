@@ -143,7 +143,16 @@ export function IdeasWorkspace() {
     const observer = new ResizeObserver(size), layout = root.current?.closest('[class*="min-h-screen"]'); if (layout?.firstElementChild) observer.observe(layout.firstElementChild);
     return () => { window.removeEventListener('resize', size); window.visualViewport?.removeEventListener('resize', size); observer.disconnect(); };
   }, []);
-  useLayoutEffect(() => { const title = titleInput.current; if (title) { title.style.height = 'auto'; title.style.height = title.scrollHeight + 'px'; } }, [displayTitle, epoch]);
+  useLayoutEffect(() => {
+    const title = titleInput.current; if (!title) return;
+    let frame = 0, width = -1;
+    const fit = () => { title.style.height = 'auto'; title.style.height = title.scrollHeight + 'px'; width = title.clientWidth; };
+    const resize = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(fit); };
+    fit();
+    const observer = new ResizeObserver(() => { if (title.clientWidth !== width) resize(); });
+    observer.observe(title.parentElement!); window.addEventListener('resize', resize);
+    return () => { observer.disconnect(); window.removeEventListener('resize', resize); cancelAnimationFrame(frame); };
+  }, [displayTitle, epoch]);
   useEffect(() => { if (focusEditor.current && note) { focusEditor.current = false; root.current?.querySelector<HTMLElement>('.continuous-editor')?.focus(); } }, [epoch, note]);
   useEffect(() => { if (naming && !nameDialog.current?.open) nameDialog.current?.showModal(); }, [naming]);
   useEffect(() => { if (action && !itemDialog.current?.open) itemDialog.current?.showModal(); }, [action]);
