@@ -58,3 +58,24 @@ routing, data access, publication workflows and backup recovery in staging.
 The previous /launches?view=ideas bookmark redirects to /ideas. Source/configuration
 and a pre-migration snapshot must be retained for rollback. The daily backup must
 no longer attempt to execute a snapshot inside the retired SQLite service.
+
+## Optional hierarchy (0.5 beta)
+
+Apply `ideas-flexible.sql` to the native PostgreSQL database after a verified backup,
+before replacing the application image. This additive change supplies `pinned`;
+parent IDs, titles, blocks, revisions and timestamps are not rewritten. The generic
+hierarchy uses the existing nullable parent reference. Legacy `sections` remain
+valid containers alongside `folders` and require no data conversion.
+
+Pages can be at the workspace root or directly in any folder. Both container kinds
+may nest. Ancestry and ownership are validated on access and movement; per-workspace
+transaction advisory locks prevent reciprocal concurrent folder moves. Content
+updates and pin/move operations retain optimistic revision checks. Search runs in
+the database over plain canonical note text; only bounded previews and metadata
+are returned to the list. No extra external search provider is configured.
+
+Before accepting new hierarchy writes, verify root pages, nesting, moves, search,
+cycle rejection and trash/restore in a disposable workspace. The previous 0.4 UI
+cannot display the new root/nested shapes, although its database schema remains
+compatible with the additive column. Retain backups and prefer a forward fix once
+real users create root pages or reorganize folders.

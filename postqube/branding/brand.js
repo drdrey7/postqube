@@ -79,7 +79,7 @@
     }
     if (!instagramReady) {
       for (const card of document.querySelectorAll('button,[role="button"],[class*="cursor-pointer"]')) {
-        if (card.dataset.postqubeInstagram || !/^Instagram\s*\(?Standalone\)?$/i.test(card.textContent.trim())) continue;
+        if (card.closest('.ideas-list,.organizer') || card.dataset.postqubeInstagram || !/^Instagram\s*\(?Standalone\)?$/i.test(card.textContent.trim())) continue;
         card.dataset.postqubeInstagram = 'pending';
         card.setAttribute('aria-label', 'Instagram — configuração pendente');
         const label = document.createElement('small'); label.className = 'postqube-pending';
@@ -118,7 +118,7 @@
       const edits = [];
       while (walker.nextNode()) {
         const n = walker.currentNode, p = n.parentElement;
-        if (!p || p.closest('script,style,textarea,input,[contenteditable],pre,code,.postqube-credit')) continue;
+        if (!p || p.closest('script,style,textarea,input,[contenteditable],pre,code,.postqube-credit,.ideas-list,.organizer')) continue;
         if (knownText.test(n.nodeValue.trim())) edits.push(n);
       }
       for (const n of edits) n.nodeValue = n.nodeValue.replace(/postiz/gi, name);
