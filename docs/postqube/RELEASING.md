@@ -16,13 +16,34 @@
 3. Squash-merge. The **Postqube image** workflow tests again, builds the runtime image once and
    publishes `ghcr.io/drdrey7/postqube:sha-<commit>`.
 4. Several merges can be collected and released together. There is no staging environment yet:
-   test locally before merging, and release when ready.
+   use the fast lane below to try small changes, and release when ready.
 
 Never build or restart production by hand (`docker build -t postqube:...` on the server,
-`docker compose up` with a new local image). Production changes only through a release, so
-every running version is a tagged, tested image that can be rolled back.
+`docker compose up` with a new local image). Production changes only through the fast lane or a
+release, so every running version is a known commit that can be rolled back.
 
-## Releasing to production
+## Fast lane (small changes, minutes)
+
+For text, colour, layout and small UI fixes while Postqube has few users. Push the change to a
+branch, then on the server:
+
+```
+postqube-quick fix/my-change        # build that branch here and put it live
+postqube-quick --rollback           # undo the last quick deploy
+```
+
+| Change | Time | Downtime |
+|---|---|---|
+| Only `postqube/branding/` (logo, colours, brand CSS/JS) | seconds | none (no restart) |
+| Frontend/backend code | about 4 minutes (about 3.5 min build + 40 s restart) | about 40 seconds |
+
+Every fast-lane deploy builds the exact pushed commit (never local edits), takes a database
+snapshot first (`/var/backups/postiz/quick`, latest 10), checks health and rolls back
+automatically. It refuses `schema.prisma` changes unless `--allow-schema` is given: use a release
+for those. Always open a PR for the same branch, because the next release replaces what the fast lane
+put live.
+
+## Releasing to production (safe lane)
 
 Run **Actions → Postqube release → Run workflow** with a version such as `v0.6.0`
 (append `-beta.N` while in beta). It waits for approval in the `production` environment, then:
