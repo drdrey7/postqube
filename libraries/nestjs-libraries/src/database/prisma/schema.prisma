@@ -1853,6 +1853,7 @@ model IdeaItem {
   title          String
   blocks         Json         @default("[]")
   revision       Int          @default(1)
+  pinned         Boolean      @default(false)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
