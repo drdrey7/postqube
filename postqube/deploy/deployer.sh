@@ -35,7 +35,8 @@ current=$(cat "$STATE/current" 2>/dev/null || true)
 log "new image $target (running: ${current:-none})"
 [ "$DRY" = --dry-run ] && { log "dry run: stopping here"; exit 0; }
 
-pin(){ printf 'services:\n  %s:\n    image: %s\n' "$SERVICE" "$1" > compose.override.yaml; docker compose up -d --no-deps "$SERVICE"; }
+# Only the image of $SERVICE is changed; other override settings are preserved.
+pin(){ python3 "$(dirname "$(readlink -f "$0")")/pin-image.py" "$COMPOSE_DIR" "$SERVICE" "$1" && docker compose up -d --no-deps "$SERVICE"; }
 healthy(){
   local end=$((SECONDS+HEALTH_TIMEOUT))
   while [ $SECONDS -lt $end ]; do
@@ -45,18 +46,18 @@ healthy(){
 }
 
 if [ -n "${BACKUP_CMD:-}" ]; then log "backup: $BACKUP_CMD"; $BACKUP_CMD; fi
+rm -f "$STATE/override.previous"
 [ -f compose.override.yaml ] && cp compose.override.yaml "$STATE/override.previous"
-pin "$target"
-if healthy; then
+# A failed recreation goes through the same rollback path as a failed health check.
+if pin "$target" && healthy; then
   echo "$current" > "$STATE/previous"; echo "$target" > "$STATE/current"
   log "deployed OK"
   docker image prune -f >/dev/null
   exit 0
 fi
-log "HEALTH CHECK FAILED for $target; rolling back"
+log "DEPLOY OR HEALTH CHECK FAILED for $target; rolling back"
 docker compose logs --tail 80 "$SERVICE" > "$STATE/failed-$(date -u +%Y%m%dT%H%M%SZ).log" 2>&1 || true
 if [ -f "$STATE/override.previous" ]; then cp "$STATE/override.previous" compose.override.yaml; else rm -f compose.override.yaml; fi
-docker compose up -d --no-deps "$SERVICE"
 echo "$target" > "$STATE/rejected"
-healthy && log "rollback OK" || log "ROLLBACK ALSO UNHEALTHY - manual action needed (backup was taken first if BACKUP_CMD is set)"
+docker compose up -d --no-deps "$SERVICE" && healthy && log "rollback OK" || log "ROLLBACK ALSO UNHEALTHY - manual action needed (backup was taken first if BACKUP_CMD is set)"
 exit 1

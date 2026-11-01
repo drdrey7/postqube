@@ -28,19 +28,21 @@ For text, colour, layout and small UI fixes while Postqube has few users. Push t
 branch, then on the server:
 
 ```
-postqube-quick fix/my-change        # build that branch here and put it live
-postqube-quick --rollback           # undo the last quick deploy
+postqube-quick fix/my-change              # build that branch here and put it live
+postqube-quick fix/my-logo --branding     # only postqube/branding: live instantly, no restart
+postqube-quick --rollback                 # undo the last fast-lane deploy (image or branding)
 ```
 
 | Change | Time | Downtime |
 |---|---|---|
-| Only `postqube/branding/` (logo, colours, brand CSS/JS) | seconds | none (no restart) |
+| Only `postqube/branding/` (logo, colours, brand CSS/JS), with `--branding` | seconds | none (no restart) |
 | Frontend/backend code | about 4 minutes (about 3.5 min build + 40 s restart) | about 40 seconds |
 
 Every fast-lane deploy builds the exact pushed commit (never local edits), takes a database
 snapshot first (`/var/backups/postiz/quick`, latest 10), checks health and rolls back
-automatically. It refuses `schema.prisma` changes unless `--allow-schema` is given: use a release
-for those. Always open a PR for the same branch, because the next release replaces what the fast lane
+automatically. It compares `schema.prisma` with the one inside the running container and refuses any
+difference unless `--allow-schema` is given: use a release for those. Only the image line of
+`compose.override.yaml` is changed; other settings there are kept. Always open a PR for the same branch, because the next release replaces what the fast lane
 put live.
 
 ## Releasing to production (safe lane)
