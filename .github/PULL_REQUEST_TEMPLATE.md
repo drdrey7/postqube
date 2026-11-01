@@ -17,7 +17,7 @@
 ## How it was tested
 
 1. [ ] CI green (native tests + image build)
-2. [ ] Checked on staging after merge, or with the `preview` steps below:
+2. [ ] Checked locally / with the steps below (there is no staging; production is updated only by a release):
 <!-- Numbered steps a reviewer can follow: setup, action, expected result. -->
 
 ## Rollback

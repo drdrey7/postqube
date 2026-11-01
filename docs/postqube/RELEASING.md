@@ -5,7 +5,7 @@
 | Branch | Role | Runs on |
 |---|---|---|
 | `feature/*`, `fix/*` | One change per branch, opened as a PR into `postqube` | CI only |
-| `postqube` | Integration branch (default). Every merge is built and tested | Staging, automatically |
+| `postqube` | Integration branch (default). Every merge is built and tested | Nothing until released |
 | `production` | Exactly what the public uses. Moved only by the release workflow | Production |
 | `main` | Untouched mirror of upstream Postiz, used for upstream updates | Nothing |
 
@@ -14,10 +14,13 @@
 1. `git switch -c feature/my-change postqube`, commit, push, open a PR into `postqube`.
 2. CI must be green: native regression tests, frontend route build and documentation checks.
 3. Squash-merge. The **Postqube image** workflow tests again, builds the runtime image once and
-   publishes `ghcr.io/drdrey7/postqube:sha-<commit>` plus the moving `:staging` tag.
-4. Within about five minutes the staging deployer on the server pulls `:staging`, recreates the
-   staging app, checks health and rolls back automatically if the check fails.
-5. Check the change on staging.
+   publishes `ghcr.io/drdrey7/postqube:sha-<commit>`.
+4. Several merges can be collected and released together. There is no staging environment yet:
+   test locally before merging, and release when ready.
+
+Never build or restart production by hand (`docker build -t postqube:...` on the server,
+`docker compose up` with a new local image). Production changes only through a release, so
+every running version is a tagged, tested image that can be rolled back.
 
 ## Releasing to production
 
@@ -43,7 +46,8 @@ not undo data changes, see [Operations](OPERATIONS.md).
 ## Rolling back production
 
 The release workflow only moves forward. To go back immediately, point `:production` at the
-previous release (the deployer picks it up within five minutes): `docker buildx imagetools create -t ghcr.io/drdrey7/postqube:production
+previous release (the deployer picks it up within five minutes):
+ `docker buildx imagetools create -t ghcr.io/drdrey7/postqube:production
 ghcr.io/drdrey7/postqube:vPREVIOUS` 
 Or, on the server, set the previous digest in `compose.override.yaml` and run
 `docker compose up -d postiz`. Then fix forward with a new release.

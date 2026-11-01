@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # Postqube pull-based deployer. Run by postqube-deployer@<env>.timer.
-# Follows a moving image tag (:staging or :production) in GHCR. When its digest
+# Follows a moving image tag (normally :production) in GHCR. When its digest
 # changes: optional backup -> pin digest in compose.override.yaml -> recreate the
 # app container -> health check -> automatic rollback to the previous digest.
 # No inbound credentials: GitHub never connects to the server.
 #
 # Config: /etc/postqube/deploy-<env>.conf (shell syntax)
-#   COMPOSE_DIR=/opt/postqube-staging   compose project directory
+#   COMPOSE_DIR=/opt/postiz             compose project directory
 #   SERVICE=postiz                      app service name
-#   CHANNEL=staging                     image tag to follow
+#   CHANNEL=production                  image tag to follow
 #   IMAGE_REPO=ghcr.io/drdrey7/postqube
 #   HEALTH_URL=https://host/api/auth/can-register
 #   BACKUP_CMD=                         optional, runs before each deploy; failure aborts

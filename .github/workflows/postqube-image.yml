@@ -1,7 +1,6 @@
 name: Postqube image
 # Every commit on `postqube` is tested, built once and published as
 #   ghcr.io/<owner>/postqube:sha-<commit>   (immutable)
-#   ghcr.io/<owner>/postqube:staging        (moving; the staging deployer follows it)
 # Production never rebuilds: postqube-release.yml retags an already-tested sha image.
 on:
   push:
@@ -39,8 +38,8 @@ jobs:
             --label org.opencontainers.image.source=https://github.com/${{ github.repository }} \
             --label org.opencontainers.image.revision=${{ github.sha }} \
             --label org.opencontainers.image.licenses=AGPL-3.0 \
-            -t "$IMAGE:sha-${{ github.sha }}" -t "$IMAGE:staging" --push .
+            -t "$IMAGE:sha-${{ github.sha }}" --push .
       - name: Summary
         run: |
-          echo "Published \`$IMAGE:sha-${{ github.sha }}\` and moved \`:staging\`." >> "$GITHUB_STEP_SUMMARY"
-          echo "The staging deployer on the server picks it up within ~5 minutes." >> "$GITHUB_STEP_SUMMARY"
+          echo "Published \`$IMAGE:sha-${{ github.sha }}\`." >> "$GITHUB_STEP_SUMMARY"
+          echo "Release it with Actions → Postqube release." >> "$GITHUB_STEP_SUMMARY"
