@@ -4,7 +4,7 @@ from pathlib import Path
 import html,re,shutil
 ROOT=Path(__file__).resolve().parents[2]
 DOCS=ROOT/'docs/postqube'; OUT=ROOT/'.postqube-site'
-NAV=[('INDEX','Overview'),('GETTING-STARTED','Getting started'),('USER-GUIDE','User guide'),('IDEAS','Ideas workspace'),('RELEASE-BETA','Release notes'),('STATUS','Beta status'),('CHANNELS','Channels'),('DEPLOYMENT','Deployment'),('OPERATIONS','Operations'),('ARCHITECTURE','Architecture'),('DEVELOPMENT','Development'),('UPDATES','Updates'),('SECURITY','Security'),('LEGAL','License & legal'),('PRIVACY','Privacy preparation'),('TERMS','Terms preparation'),('DATA-DELETION','Deletion preparation'),('LAUNCH','Launch checklist'),('FAQ','FAQ'),('CONTRIBUTING','Contributing')]
+NAV=[('INDEX','Overview'),('GETTING-STARTED','Getting started'),('USER-GUIDE','User guide'),('IDEAS','Ideas workspace'),('RELEASE-BETA','Release notes'),('STATUS','Beta status'),('CHANNELS','Channels'),('DEPLOYMENT','Deployment'),('OPERATIONS','Operations'),('ARCHITECTURE','Architecture'),('DEVELOPMENT','Development'),('UPDATES','Updates'),('RELEASING','Releasing'),('SECURITY','Security'),('LEGAL','License & legal'),('PRIVACY','Privacy preparation'),('TERMS','Terms preparation'),('DATA-DELETION','Deletion preparation'),('LAUNCH','Launch checklist'),('FAQ','FAQ'),('CONTRIBUTING','Contributing')]
 def filename(slug):return 'index.html' if slug=='INDEX' else slug.lower()+'.html'
 def target(url):
     if re.fullmatch(r'[A-Z-]+\.md',url):return filename(url[:-3])
