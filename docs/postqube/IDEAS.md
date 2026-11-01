@@ -8,7 +8,7 @@ light/dark, language and notification controls remain native.
 
 ![Ideas desktop in a disposable demonstration workspace](assets/ideas-desktop.png)
 
-![Light theme with minimized organizing columns](assets/ideas-light-collapsed.png)
+![Native light theme](assets/ideas-light-collapsed.png)
 
 ![Mobile notes](assets/ideas-mobile.png)
 
@@ -27,6 +27,8 @@ the current task marker without deleting text. Paste inserts plain text and pres
 line breaks. Text and marker insertion use the browser undo/redo history.
 
 ## Native formatting and language
+
+![Native text formatting controls](assets/ideas-formatting.png)
 
 Folders and sections have thin, stable colored accents. The Text menu provides
 font family, size, bold, italic, underline, strikethrough, highlighting, text color,
@@ -82,3 +84,5 @@ Native PostgreSQL backups now cover Ideas. Restore and test the native database
 alongside the matching image/source version. Legacy snapshots still follow the
 operator's retention/deletion policy. Before commercial launch, verify the complete
 shared-workspace deletion/export/backup lifecycle and off-server recovery drill.
+
+[0.4 beta release validation](RELEASE-0.4.md)
