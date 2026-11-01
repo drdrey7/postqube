@@ -3,6 +3,7 @@
 
 usage: pin-image.py <compose-dir> <service> <image>
 """
+import os
 import sys
 from pathlib import Path
 import yaml
@@ -14,6 +15,11 @@ doc = doc or {}
 doc.setdefault('services', {}).setdefault(service, {})
 doc['services'][service] = doc['services'][service] or {}
 doc['services'][service]['image'] = image
+# Keep the existing file's mode (it may hold secrets); new files are 0600.
+mode = path.stat().st_mode & 0o777 if path.exists() else 0o600
 tmp = path.with_suffix('.yaml.tmp')
-tmp.write_text(yaml.safe_dump(doc, sort_keys=False))
+fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+with os.fdopen(fd, 'w') as f:
+    f.write(yaml.safe_dump(doc, sort_keys=False))
+os.chmod(tmp, mode)
 tmp.replace(path)

@@ -100,11 +100,12 @@ ls -1t "$SNAPSHOTS"/*.dump | tail -n +11 | xargs -r rm -f
 
 # 6. Swap, health check, automatic rollback (also when recreation itself fails).
 prev=$(docker inspect -f '{{.Config.Image}}' "$SERVICE")
-saved="$STATE/override.before-quick-$short"; rm -f "$saved"
+saved="$STATE/override.before-quick-$(date -u +%Y%m%dT%H%M%SZ)-$$"   # unique per attempt
 [ -f compose.override.yaml ] && cp compose.override.yaml "$saved"
 if pin "$image" && healthy; then
   printf 'kind=image\noverride=%q\n' "$( [ -f "$saved" ] && echo "$saved" || echo none )" > "$STATE/last-quick"
   log "LIVE $image ($REF) - previous: $prev - snapshot: $snap"
+  ls -1t "$STATE"/override.before-quick-* 2>/dev/null | tail -n +11 | xargs -r rm -f
   docker images --format '{{.CreatedAt}}\t{{.Repository}}:{{.Tag}}' postqube | grep ':quick-' | sort -r | tail -n +4 | cut -f2 \
     | grep -vx "$prev" | xargs -r docker rmi >/dev/null 2>&1 || true
   echo "✅ Live: $image. Undo with: postqube-quick --rollback"
