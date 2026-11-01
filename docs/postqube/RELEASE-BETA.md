@@ -37,3 +37,11 @@ resuming work. The same native session, workspace, theme, language and shell rem
 [Feature changes](https://github.com/drdrey7/postqube/pull/5) ·
 [Responsive title follow-up](https://github.com/drdrey7/postqube/pull/6) ·
 [Release metadata](https://github.com/drdrey7/postqube/blob/postqube-0.5.0-beta.1/postqube/release.json)
+
+## Build evidence
+
+- [Native feature build and 12 tests](https://github.com/drdrey7/postqube/actions/runs/41280929231).
+- [Responsive title build and regression tests](https://github.com/drdrey7/postqube/actions/runs/41293548215).
+
+The responsive follow-up checked manual and automatic titles at 360, 390, 844,
+1024 and 1440px, retaining the same editor, note text and selected title range.
