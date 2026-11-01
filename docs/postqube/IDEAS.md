@@ -22,9 +22,23 @@ the bottom tabs move between levels rather than squeezing four narrow columns.
 
 The note is one continuous editing surface. Put the cursor before a word and click
 Tarefa: the task circle inserts at that point. Click to complete/reopen. Enter in
-a task continues the checklist; an empty task exits it. Texto normal removes the
-current task marker without deleting text. Paste inserts plain text and preserves
+a task continues the checklist; an empty task exits it. The Text menu can remove
+the current task marker without deleting text. Paste inserts plain text and preserves
 line breaks. Text and marker insertion use the browser undo/redo history.
+
+## Native formatting and language
+
+Folders and sections have thin, stable colored accents. The Text menu provides
+font family, size, bold, italic, underline, strikethrough, highlighting, text color,
+clear formatting and undo/redo. Formatting survives autosave and reopening.
+Rich text is stored as validated text runs, never executable HTML or arbitrary CSS.
+Older plain-text notes remain compatible.
+
+The menu, workspace, dialogs, accessible labels, placeholders and save states use
+the same useT/i18next resources as the rest of the app. All 14 languages exposed by
+the native language selector have complete Ideas key and interpolation coverage.
+Language changes preserve note content, current selection and editor state; dates
+follow the selected locale. User-authored notes are never translated automatically.
 
 ## Teams, authentication and storage
 

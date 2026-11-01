@@ -53,7 +53,7 @@
       const footer = document.createElement('footer');
       footer.className = 'postqube-source';
       footer.setAttribute('aria-label', 'Postqube source and license');
-      footer.innerHTML = '<a href="https://github.com/drdrey7/postqube/tree/postqube-0.3.0-beta.1" target="_blank" rel="noopener noreferrer">Código-fonte</a><span> · </span><a href="https://github.com/drdrey7/postqube/blob/postqube-0.3.0-beta.1/LICENSE" target="_blank" rel="noopener noreferrer">AGPL</a><span> · </span><a href="https://drdrey7.github.io/postqube/" target="_blank" rel="noopener noreferrer">Ajuda</a>';
+      footer.innerHTML = '<a href="https://github.com/drdrey7/postqube/tree/postqube-0.4.0-beta.1" target="_blank" rel="noopener noreferrer">Código-fonte</a><span> · </span><a href="https://github.com/drdrey7/postqube/blob/postqube-0.4.0-beta.1/LICENSE" target="_blank" rel="noopener noreferrer">AGPL</a><span> · </span><a href="https://drdrey7.github.io/postqube/" target="_blank" rel="noopener noreferrer">Ajuda</a>';
       document.body.append(footer);
     }
     if (/postiz/i.test(document.title)) document.title = document.title.replace(/postiz/gi, name);

@@ -1,3 +1,4 @@
+import { parseIdeaRuns } from '@gitroom/helpers/ideas/text-format';
 import { Body, Controller, Delete, ForbiddenException, Get, HttpException, Injectable, Param, Patch, Post, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Organization, User } from '@prisma/client';
@@ -22,7 +23,7 @@ export function ideaBlocks(value: unknown) {
     if (!b || !['text', 'task'].includes(b.type) || typeof b.text !== 'string' || typeof b.id !== 'string' || !/^[a-zA-Z0-9-]{1,80}$/.test(b.id) || ids.has(b.id)) fail(400, 'Bloco inválido.');
     if (b.text.length > 50000 || (b.type === 'task' && typeof b.done !== 'boolean')) fail(400, 'Texto ou tarefa inválidos.');
     ids.add(b.id); size += b.text.length;
-    return { id: b.id, type: b.type, text: b.text, ...(b.type === 'task' ? { done: b.done } : {}), ...(b.inline === true ? { inline: true } : {}) };
+    return { id: b.id, type: b.type, text: b.text, ...(b.type === 'task' ? { done: b.done } : {}), ...(b.inline === true ? { inline: true } : {}), ...(b.runs === undefined ? {} : { runs: parseIdeaRuns(b.runs, b.text, message => fail(400, message)) }) };
   });
   if (size > 400000) fail(400, 'A página atingiu o limite de texto.');
   return blocks;
