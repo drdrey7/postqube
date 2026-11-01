@@ -85,4 +85,4 @@ alongside the matching image/source version. Legacy snapshots still follow the
 operator's retention/deletion policy. Before commercial launch, verify the complete
 shared-workspace deletion/export/backup lifecycle and off-server recovery drill.
 
-[0.4 beta release validation](RELEASE-0.4.md)
+[0.4 beta release validation](RELEASE-BETA.md)

@@ -28,4 +28,4 @@ service or schema migration is required.
 
 [Changes and checks](https://github.com/drdrey7/postqube/pull/4) ·
 [Native build check](https://github.com/drdrey7/postqube/actions/runs/41274578981) ·
-[Ideas guide](IDEAS.md) · [Release metadata](../../postqube/release.json)
+[Ideas guide](IDEAS.md) · [Release metadata](https://github.com/drdrey7/postqube/blob/postqube-0.4.0-beta.1/postqube/release.json)
