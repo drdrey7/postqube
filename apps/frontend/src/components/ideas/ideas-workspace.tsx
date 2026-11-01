@@ -45,6 +45,7 @@ export function IdeasWorkspace() {
   const pathName = (id: string | null) => (containerPath(containers, id) || []).map(item => item.title).join(' / ') || label('unfiled');
   const filterTitle = activeFolder?.title || label(filter === 'loose' ? 'unfiled' : filter === 'pinned' ? 'pinned' : 'all_ideas');
   const createIn = activeFolder?.id || null;
+  const displayTitle = note ? ideaHeading(note.title, ideaText(note.blocks), '') : '';
   const api = useCallback(async (path: string, method = 'GET', data?: unknown, keepalive = false) => {
     const response = await nativeFetch('/ideas/' + path, { method, ...(data === undefined ? {} : { body: JSON.stringify(data) }), keepalive });
     const result = await response.json();
@@ -137,12 +138,12 @@ export function IdeasWorkspace() {
     return () => { window.removeEventListener('beforeunload', unload); window.removeEventListener('online', online); window.removeEventListener('focus', focus); };
   }, [remember, save, refresh, openPage]);
   useLayoutEffect(() => {
-    const size = () => { if (root.current) root.current.style.setProperty('--ideas-height', `${Math.max(260, innerHeight - root.current.getBoundingClientRect().top - (innerWidth <= 800 ? 8 : 12))}px`); };
+    const size = () => { if (root.current) root.current.style.setProperty('--ideas-height', `${Math.max(260, (innerWidth <= 850 ? window.visualViewport?.height || innerHeight : innerHeight) - root.current.getBoundingClientRect().top - (innerWidth <= 800 ? 8 : 12))}px`); };
     size(); window.addEventListener('resize', size); window.visualViewport?.addEventListener('resize', size);
     const observer = new ResizeObserver(size), layout = root.current?.closest('[class*="min-h-screen"]'); if (layout?.firstElementChild) observer.observe(layout.firstElementChild);
     return () => { window.removeEventListener('resize', size); window.visualViewport?.removeEventListener('resize', size); observer.disconnect(); };
   }, []);
-  useLayoutEffect(() => { const title = titleInput.current; if (title) { title.style.height = 'auto'; title.style.height = title.scrollHeight + 'px'; } }, [note?.title, epoch]);
+  useLayoutEffect(() => { const title = titleInput.current; if (title) { title.style.height = 'auto'; title.style.height = title.scrollHeight + 'px'; } }, [displayTitle, epoch]);
   useEffect(() => { if (focusEditor.current && note) { focusEditor.current = false; root.current?.querySelector<HTMLElement>('.continuous-editor')?.focus(); } }, [epoch, note]);
   useEffect(() => { if (naming && !nameDialog.current?.open) nameDialog.current?.showModal(); }, [naming]);
   useEffect(() => { if (action && !itemDialog.current?.open) itemDialog.current?.showModal(); }, [action]);
@@ -237,7 +238,7 @@ export function IdeasWorkspace() {
   }
   function dropProps(parentId: string | null) { return {
     onDragOver: (event: DragEvent) => { if (event.dataTransfer.types.includes('application/x-postqube-idea')) { event.preventDefault(); event.dataTransfer.dropEffect = 'move'; setDrop(parentId); } },
-    onDragLeave: (event: DragEvent) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setDrop(undefined); },
+    onDragLeave: (event: DragEvent) => { if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) setDrop(undefined); },
     onDrop: (event: DragEvent) => dropOn(event, parentId),
   }; }
   const sortedFolders = [...containers].sort((a, b) => a.title.localeCompare(b.title, i18n.resolvedLanguage));
@@ -286,7 +287,7 @@ export function IdeasWorkspace() {
               <button className="page-main" onClick={() => void openPage(page.id)}><span className="page-title">{page.pinned && <span className="pin-mark" aria-label={label('pinned')}>☆ </span>}{heading(page)}</span><span className="page-preview">{page.excerpt || label('empty_note')}</span><span className="page-meta"><span>{date(sort === 'created' ? page.createdAt : page.updatedAt)}</span><span>{pathName(page.parentId)}</span></span></button>
               <button className="item-menu" aria-label={label('options', { name: heading(page) })} onClick={() => { setError(''); setAction(page); }}>⋯</button>
             </div>)}
-            {!loaded ? <div className="empty-list" role="status">{label('loading')}</div> : !pages.length && !childFolders.length && <div className="empty-list"><span aria-hidden>✧</span><strong>{label(query.trim() ? 'no_results' : 'no_ideas')}</strong><p>{label(query.trim() ? 'try_search' : 'write_first')}</p>{!query.trim() && <button className="subtle-button" disabled={busy} onClick={() => void newPage()}>+ {label('new_idea')}</button>}</div>}
+            {!loaded ? <div className="empty-list" role="status">{label('loading')}</div> : !pages.length && !childFolders.length && !searching && <div className="empty-list"><span aria-hidden>✧</span><strong>{label(query.trim() ? 'no_results' : 'no_ideas')}</strong><p>{label(query.trim() ? 'try_search' : 'write_first')}</p>{!query.trim() && <button className="subtle-button" disabled={busy} onClick={() => void newPage()}>+ {label('new_idea')}</button>}</div>}
           </div>
         </div>
       </aside>
@@ -295,7 +296,7 @@ export function IdeasWorkspace() {
         {note && <div className="note-toolbar"><div className="toolbar-group"><TextTools marks={marks} format={(command, value) => editor.current?.format(command, value)} normalText={() => editor.current?.normalText()} /><button className="toolbar-button" onMouseDown={event => event.preventDefault()} onClick={() => editor.current?.insertTask()}><span className="task-icon" />{label('task')}</button></div><span className="toolbar-hint">{label('hint')}</span><button className="icon-button" aria-label={label('page_options')} onClick={() => { setError(''); setAction(asItem(note)); }}>⋯</button></div>}
         {error && !naming && !moving && !action && !trash && <div className="conflict-banner" role="alert">{errorText}<button onClick={() => { setError(''); void refresh(); }}>{label('retry')}</button></div>}
         {conflict && <div className="conflict-banner" role="alert"><strong>{label('conflict_title')}</strong><p>{label('conflict_help')}</p><button onClick={() => { if (note) void navigator.clipboard.writeText(ideaHeading(note.title, text, label('untitled')) + '\n\n' + text); }}>{label('copy_text')}</button><button onClick={() => void saveCopy()}>{label('save_copy')}</button><button onClick={() => { if (note && confirm(label('confirm_latest'))) { forget(note.id); current.current.dirty = false; current.current.conflict = false; void openPage(note.id, true); } }}>{label('open_latest')}</button></div>}
-        <div className="editor-scroll">{note ? <article className="note"><div className="note-meta"><span className="note-kicker">{label('building')}</span><span>{date(note.createdAt)}</span></div><textarea ref={titleInput} className="note-title" rows={1} aria-label={label('page_title')} placeholder={ideaHeading('', text, label('untitled'))} maxLength={160} value={note.title} onChange={event => changed({ title: event.target.value.replace(/\n/g, ' ') })} /><div className="note-rule" /><NoteEditor key={note.id + ':' + epoch} ref={editor} initial={note.blocks} labels={{ text: label('note_text'), placeholder: label('note_placeholder'), task: label('task_completed') }} onChange={blocks => changed({ blocks })} onFormattingChange={next => setMarks(previous => JSON.stringify(previous) === JSON.stringify(next) ? previous : next)} /></article> : <div className="empty-editor"><div className="empty-mark" aria-hidden>✧</div><span className="eyebrow">{label('think')}</span><h2>{label('empty_title')}</h2><p>{label('capture_first')}</p><button className="primary-button" disabled={busy || !loaded} onClick={() => void newPage()}>+ {label('new_idea')}</button></div>}</div>
+        <div className="editor-scroll">{note ? <article className="note"><div className="note-meta"><span className="note-kicker">{label('building')}</span><span>{date(note.createdAt)}</span></div><textarea ref={titleInput} className="note-title" rows={1} aria-label={label('page_title')} placeholder={label('untitled')} maxLength={160} value={displayTitle} onChange={event => changed({ title: event.target.value.replace(/\n/g, ' ') })} /><div className="note-rule" /><NoteEditor key={note.id + ':' + epoch} ref={editor} initial={note.blocks} labels={{ text: label('note_text'), placeholder: label('note_placeholder'), task: label('task_completed') }} onChange={blocks => changed({ blocks })} onFormattingChange={next => setMarks(previous => JSON.stringify(previous) === JSON.stringify(next) ? previous : next)} /></article> : <div className="empty-editor"><div className="empty-mark" aria-hidden>✧</div><span className="eyebrow">{label('think')}</span><h2>{label('empty_title')}</h2><p>{label('capture_first')}</p><button className="primary-button" disabled={busy || !loaded} onClick={() => void newPage()}>+ {label('new_idea')}</button></div>}</div>
         <div className="note-footer"><span>{note ? label('word_count', { count: words }) + (tasks.length ? ' · ' + label('tasks_count', { done: tasks.filter(task => task.done).length, total: tasks.length }) : '') : label('shared')}</span><span>{label('access')}</span></div>
         {status === 'failed' && <button className="retry-save" onClick={() => void save()}>{label('retry_save')}</button>}
       </section>
