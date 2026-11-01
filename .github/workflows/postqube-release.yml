@@ -1,0 +1,79 @@
+name: Postqube release (promote to production)
+# Manual, approval-gated promotion of a commit that is already on `postqube`
+# and already has a tested sha image. Nothing is rebuilt.
+#  1. moves the `production` branch to that commit (fast-forward only)
+#  2. creates tag vX.Y.Z and a GitHub release
+#  3. retags the image as :vX.Y.Z and :production
+# The production deployer on the server follows :production (backup first,
+# health check, automatic rollback).
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag, e.g. v0.6.0 (or v0.6.0-beta.1)'
+        required: true
+      commit:
+        description: 'Commit on postqube to release (empty = current postqube head)'
+        required: false
+concurrency:
+  group: postqube-release
+  cancel-in-progress: false
+permissions:
+  contents: write
+  packages: write
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/postqube
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate inputs
+        id: v
+        env:
+          VERSION: ${{ inputs.version }}
+          COMMIT: ${{ inputs.commit }}
+        run: |
+          set -euo pipefail
+          [[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]] || { echo "Bad version '$VERSION'"; exit 1; }
+          if git rev-parse -q --verify "refs/tags/$VERSION" >/dev/null; then echo "Tag $VERSION already exists"; exit 1; fi
+          sha=$(git rev-parse "${COMMIT:-origin/postqube}^{commit}")
+          git merge-base --is-ancestor "$sha" origin/postqube || { echo "$sha is not on postqube"; exit 1; }
+          if git rev-parse -q --verify origin/production >/dev/null; then
+            git merge-base --is-ancestor origin/production "$sha" || { echo "production is not an ancestor of $sha (no fast-forward)"; exit 1; }
+          fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Require the tested image for that commit
+        run: docker buildx imagetools inspect "$IMAGE:sha-${{ steps.v.outputs.sha }}" >/dev/null
+      - name: Move production branch and tag
+        env:
+          VERSION: ${{ inputs.version }}
+          SHA: ${{ steps.v.outputs.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git push origin "$SHA:refs/heads/production"
+          git tag -a "$VERSION" "$SHA" -m "Postqube $VERSION"
+          git push origin "refs/tags/$VERSION"
+      - name: Promote image
+        env:
+          VERSION: ${{ inputs.version }}
+          SHA: ${{ steps.v.outputs.sha }}
+        run: docker buildx imagetools create -t "$IMAGE:$VERSION" -t "$IMAGE:production" "$IMAGE:sha-$SHA"
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          pre=""; [[ "$VERSION" == *-* ]] && pre="--prerelease"
+          gh release create "$VERSION" --verify-tag --generate-notes $pre
+          echo "Released \`$IMAGE:$VERSION\` → \`:production\`. The server deploys it within ~5 minutes." >> "$GITHUB_STEP_SUMMARY"

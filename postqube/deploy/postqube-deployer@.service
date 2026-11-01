@@ -1,0 +1,9 @@
+[Unit]
+Description=Postqube deployer (%i)
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/postqube-deployer/deployer.sh %i
+TimeoutStartSec=45min
