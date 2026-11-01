@@ -19,7 +19,7 @@ test('native i18next switches Ideas controls and save states in place', async ()
   const i18n = createInstance(); await i18n.init({ resources, lng: 'pt', fallbackLng: 'en', interpolation: { escapeValue: false } });
   expect(i18n.t('ideas')).toBe('Ideias'); expect(i18n.t('ideas_ui.Text')).toBe('Texto');
   await i18n.changeLanguage('en');
-  expect(i18n.t('ideas')).toBe('Ideas'); expect(i18n.t('ideas_ui.Text')).toBe('Text'); expect(i18n.t('ideas_ui.status_saved')).toBe('Saved');
+  expect(i18n.t('ideas')).toBe('Ideas'); expect(i18n.t('ideas_ui.Text')).toBe('Text'); expect(i18n.t('ideas_ui.status_saved')).toBe('Saved'); expect(i18n.t('ideas_ui.page_count', { count: 1 })).toBe('1 page');
   await i18n.changeLanguage('de'); expect(i18n.t('ideas_ui.folders')).toBe('Ordner');
-  await i18n.changeLanguage('pt'); expect(i18n.t('ideas_ui.status_saved')).toBe('Guardado');
+  await i18n.changeLanguage('pt'); expect(i18n.t('ideas_ui.status_saved')).toBe('Guardado'); expect(i18n.t('ideas_ui.page_count', { count: 1 })).toBe('1 página'); expect(i18n.t('ideas_ui.page_count', { count: 0 })).toBe('0 páginas');
 });
