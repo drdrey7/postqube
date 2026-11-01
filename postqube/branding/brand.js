@@ -53,7 +53,7 @@
       const footer = document.createElement('footer');
       footer.className = 'postqube-source';
       footer.setAttribute('aria-label', 'Postqube source and license');
-      footer.innerHTML = '<a href="https://github.com/drdrey7/postqube/tree/postqube-0.4.0-beta.1" target="_blank" rel="noopener noreferrer">Código-fonte</a><span> · </span><a href="https://github.com/drdrey7/postqube/blob/postqube-0.4.0-beta.1/LICENSE" target="_blank" rel="noopener noreferrer">AGPL</a><span> · </span><a href="https://drdrey7.github.io/postqube/" target="_blank" rel="noopener noreferrer">Ajuda</a>';
+      footer.innerHTML = '<a href="https://github.com/drdrey7/postqube/tree/postqube-0.5.0-beta.1" target="_blank" rel="noopener noreferrer">Código-fonte</a><span> · </span><a href="https://github.com/drdrey7/postqube/blob/postqube-0.5.0-beta.1/LICENSE" target="_blank" rel="noopener noreferrer">AGPL</a><span> · </span><a href="https://drdrey7.github.io/postqube/" target="_blank" rel="noopener noreferrer">Ajuda</a>';
       document.body.append(footer);
     }
     if (/postiz/i.test(document.title)) document.title = document.title.replace(/postiz/gi, name);
@@ -79,7 +79,7 @@
     }
     if (!instagramReady) {
       for (const card of document.querySelectorAll('button,[role="button"],[class*="cursor-pointer"]')) {
-        if (card.dataset.postqubeInstagram || !/^Instagram\s*\(?Standalone\)?$/i.test(card.textContent.trim())) continue;
+        if (card.closest('.ideas-list,.organizer') || card.dataset.postqubeInstagram || !/^Instagram\s*\(?Standalone\)?$/i.test(card.textContent.trim())) continue;
         card.dataset.postqubeInstagram = 'pending';
         card.setAttribute('aria-label', 'Instagram — configuração pendente');
         const label = document.createElement('small'); label.className = 'postqube-pending';
@@ -118,7 +118,7 @@
       const edits = [];
       while (walker.nextNode()) {
         const n = walker.currentNode, p = n.parentElement;
-        if (!p || p.closest('script,style,textarea,input,[contenteditable],pre,code,.postqube-credit')) continue;
+        if (!p || p.closest('script,style,textarea,input,[contenteditable],pre,code,.postqube-credit,.ideas-list,.organizer')) continue;
         if (knownText.test(n.nodeValue.trim())) edits.push(n);
       }
       for (const n of edits) n.nodeValue = n.nodeValue.replace(/postiz/gi, name);
