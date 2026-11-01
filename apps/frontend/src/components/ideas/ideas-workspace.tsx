@@ -203,7 +203,7 @@ export function IdeasWorkspace() {
         return true;
       } finally { flight.current = null; }
     })();
-    flight.current = pending; await pending; await refresh();
+    flight.current = pending.catch(() => false); await pending; await refresh();
   }
   async function move(item: Item, parentId: string | null) {
     setBusy(true); setError('');
