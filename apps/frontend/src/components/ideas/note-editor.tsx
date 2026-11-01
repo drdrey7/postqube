@@ -76,6 +76,27 @@ export function readNote(root: HTMLElement): IdeaBlock[] {
   }
   flush(); return blocks.length ? blocks : [newText()];
 }
+function applyMarks(span: HTMLElement, marks: IdeaMarks) {
+  if (marks.bold) span.style.fontWeight = '700'; if (marks.italic) span.style.fontStyle = 'italic';
+  if (marks.underline || marks.strike) span.style.textDecorationLine = [marks.underline ? 'underline' : '', marks.strike ? 'line-through' : ''].filter(Boolean).join(' ');
+  if (marks.font) span.style.fontFamily = IDEA_FONTS[marks.font].css;
+  if (marks.size) span.style.fontSize = marks.size + 'px'; if (marks.color) span.style.color = marks.color;
+  if (marks.highlight) span.style.backgroundColor = marks.highlight;
+}
+
+export function resizedNoteSelection(root: HTMLElement, range: Range, size: number): HTMLElement {
+  const holder = document.createElement('div'); holder.append(range.cloneContents());
+  let node = range.commonAncestorContainer instanceof HTMLElement ? range.commonAncestorContainer : range.commonAncestorContainer.parentElement;
+  const parents: HTMLElement[] = []; while (node && node !== root) { parents.unshift(node); node = node.parentElement; }
+  const inherited = parents.reduce((marks, element) => inheritMarks(element, marks), {} as IdeaMarks);
+  const wrapper = document.createElement('span'); applyMarks(wrapper, inherited);
+  const walker = document.createTreeWalker(holder, NodeFilter.SHOW_TEXT), nodes: Text[] = [];
+  while (walker.nextNode()) if (!walker.currentNode.parentElement?.closest('[data-task]')) nodes.push(walker.currentNode as Text);
+  for (const text of nodes) { const span = document.createElement('span'); span.style.fontSize = size + 'px'; text.replaceWith(span); span.append(text); }
+  if (range.collapsed) { const span = document.createElement('span'); span.style.fontSize = size + 'px'; span.textContent = '\u200b'; holder.append(span); }
+  wrapper.append(...Array.from(holder.childNodes)); return wrapper;
+}
+
 export function renderNote(root: HTMLElement, blocks: IdeaBlock[]) {
   root.replaceChildren();
   blocks.forEach((b, i) => {
@@ -85,11 +106,7 @@ export function renderNote(root: HTMLElement, blocks: IdeaBlock[]) {
     try { if (b.runs) runs = parseIdeaRuns(b.runs, b.text, () => { throw new Error('Invalid recovery formatting'); }); } catch { /* Plain text is still recoverable. */ }
     for (const run of runs) {
       const span = document.createElement('span'); span.textContent = run.text;
-      if (run.bold) span.style.fontWeight = '700'; if (run.italic) span.style.fontStyle = 'italic';
-      if (run.underline || run.strike) span.style.textDecorationLine = [run.underline ? 'underline' : '', run.strike ? 'line-through' : ''].filter(Boolean).join(' ');
-      if (run.font) span.style.fontFamily = IDEA_FONTS[run.font].css;
-      if (run.size) span.style.fontSize = run.size + 'px'; if (run.color) span.style.color = run.color;
-      if (run.highlight) span.style.backgroundColor = run.highlight;
+      applyMarks(span, run);
       if (Object.keys(run).length > 1) root.append(span); else root.append(document.createTextNode(run.text));
     }
   });
@@ -136,12 +153,7 @@ export const NoteEditor = forwardRef<NoteEditorHandle, { initial: IdeaBlock[]; o
       if (command === 'size') {
         const size = value === 'default' ? Number.parseFloat(getComputedStyle(root.current!).fontSize) : Number(value);
         if (!Number.isInteger(size) || size < 8 || size > 48) return;
-        const range = getSelection()!.getRangeAt(0), collapsed = range.collapsed, fragment = range.cloneContents(), holder = document.createElement('div'); holder.append(fragment);
-        const walker = document.createTreeWalker(holder, NodeFilter.SHOW_TEXT), nodes: Text[] = [];
-        while (walker.nextNode()) if (!walker.currentNode.parentElement?.closest('[data-task]')) nodes.push(walker.currentNode as Text);
-        for (const text of nodes) { const span = document.createElement('span'); span.style.fontSize = size + 'px'; text.replaceWith(span); span.append(text); }
-        if (collapsed) { const span = document.createElement('span'); span.style.fontSize = size + 'px'; span.textContent = '\u200b'; holder.append(span); }
-        const wrapper = document.createElement('span'), id = crypto.randomUUID(); wrapper.dataset.noteFormat = id; wrapper.append(...Array.from(holder.childNodes));
+        const range = getSelection()!.getRangeAt(0), collapsed = range.collapsed, wrapper = resizedNoteSelection(root.current!, range, size), id = crypto.randomUUID(); wrapper.dataset.noteFormat = id;
         document.execCommand('insertHTML', false, wrapper.outerHTML);
         const inserted = root.current!.querySelector<HTMLElement>('[data-note-format=\"' + id + '\"]');
         if (inserted) { const selected = document.createRange(); selected.selectNodeContents(inserted); if (collapsed) selected.collapse(false); const current = getSelection()!; current.removeAllRanges(); current.addRange(selected); inserted.removeAttribute('data-note-format'); }

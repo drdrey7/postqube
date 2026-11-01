@@ -1,6 +1,6 @@
 import { parseIdeaRuns } from '../../../libraries/helpers/src/ideas/text-format';
 import { randomUUID } from 'node:crypto';
-import { readNote, renderNote } from '../../../apps/frontend/src/components/ideas/note-editor';
+import { readNote, renderNote, resizedNoteSelection } from '../../../apps/frontend/src/components/ideas/note-editor';
 beforeAll(() => Object.defineProperty(crypto, 'randomUUID', { value: randomUUID, configurable: true }));
 const invalid = (message: string): never => { throw Error(message); };
 const clean = (root: HTMLElement) => readNote(root).map(({ id, ...block }) => block);
@@ -38,4 +38,14 @@ test('rendering rich notes never treats text as HTML, or accepts arbitrary style
   expect(() => parseIdeaRuns([{ text: 'ok', highlight: 'url(https://evil.example)' }], 'ok', invalid)).toThrow();
   expect(() => parseIdeaRuns([{ text: 'ok', size: 999 }], 'ok', invalid)).toThrow();
   expect(() => parseIdeaRuns([{ text: 'different' }], 'original', invalid)).toThrow();
+});
+
+// A range contained within one text node does not clone its styled ancestors.
+test('resizing a selection keeps inherited font, bold, underline and surrounding text', () => {
+  const root = document.createElement('div'); root.innerHTML = '<span style="font-family:Georgia;font-weight:700;text-decoration-line:underline">Before chosen after</span>';
+  const text = root.firstElementChild!.firstChild!, range = document.createRange(); range.setStart(text, 7); range.setEnd(text, 13);
+  const replacement = resizedNoteSelection(root, range, 24); range.deleteContents(); range.insertNode(replacement);
+  expect(root.textContent).toBe('Before chosen after');
+  const chosen = readNote(root).flatMap(b => b.runs || []).find(run => run.text === 'chosen');
+  expect(chosen).toEqual({ text: 'chosen', bold: true, underline: true, font: 'georgia', size: 24 });
 });
