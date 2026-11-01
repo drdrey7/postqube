@@ -237,6 +237,7 @@ export function IdeasWorkspace() {
     try { const data = JSON.parse(event.dataTransfer.getData('application/x-postqube-idea')); const item = [...containers, ...tree.pages].find(item => item.id === data.id && item.kind === data.kind); if (item && item.parentId !== parentId) void move(item, parentId); } catch {}
   }
   function dropProps(parentId: string | null) { return {
+    onDragEnter: (event: DragEvent) => { if (event.dataTransfer.types.includes('application/x-postqube-idea')) { event.preventDefault(); setDrop(parentId); } },
     onDragOver: (event: DragEvent) => { if (event.dataTransfer.types.includes('application/x-postqube-idea')) { event.preventDefault(); event.dataTransfer.dropEffect = 'move'; setDrop(parentId); } },
     onDragLeave: (event: DragEvent) => { if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) setDrop(undefined); },
     onDrop: (event: DragEvent) => dropOn(event, parentId),
