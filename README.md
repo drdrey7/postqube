@@ -24,7 +24,7 @@ operations files are easy to find. See [provenance and changes](UPSTREAM.md).
 | --- | --- |
 | Email/password signup; optional company | Verified with disposable accounts |
 | Separate workspaces | Verified |
-| Ideas: folders, sections, pages, tasks | Native page/API, shared within each workspace |
+| Ideas: instant notes, optional folders, search and tasks | Native page/API, shared within each workspace |
 | Desktop/mobile calendar | Visually checked at 1440×1000 and 390×844 |
 | X connection and native API | Verified; paid live publishing not retested |
 | Instagram image/carousel/Reel/Story support | Native upstream capability; connection not activated |
@@ -59,8 +59,10 @@ the root upstream Compose file unchanged as a hardened public deployment.
 
 ## Ideas for your team
 
-Folders → Sections → Pages → Editor, with text, circular task checkboxes and
-autosave. Shared with current workspace members, with separate workspaces isolated.
+Create a page immediately, keep it unfiled or organize it in optional folders and
+subfolders. Search all titles/text, move pages, pin important ideas and resume where
+you stopped. Continuous text, formatting, circular tasks and autosave are native.
+Shared with current workspace members; separate workspaces remain isolated.
 
 ![Ideas desktop — disposable demonstration content](docs/postqube/assets/ideas-desktop.png)
 

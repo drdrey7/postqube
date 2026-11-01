@@ -12,6 +12,8 @@ no folder, subfolder or naming dialog is required.
 
 Screenshots use disposable demonstration text; never customer notes.
 
+![Mobile page list](assets/ideas-mobile-list.png)
+
 ## Optional organization
 
 All three workflows are supported:
@@ -28,6 +30,8 @@ intact. Nothing is moved merely by installing the update.
 your folder tree and Trash. Unfiled is a view of root pages; it is not a compulsory
 hidden folder. Creating a page uses the selected folder, or the workspace root
 when viewing All ideas, Unfiled or Pinned. The creation location is displayed.
+
+![Optional organization panel](assets/ideas-organization.png)
 
 Use **Move to…** in the page/folder menu or the note's location at the top.
 The desktop also supports dragging pages or folders onto a folder, or onto

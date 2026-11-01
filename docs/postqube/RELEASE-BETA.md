@@ -1,31 +1,39 @@
-# Postqube 0.4.0 beta 1 — Ideas formatting and languages
+# Postqube 0.5.0 beta 1 — write first, organize later
 
-Ideas now responds to the same language selector as the rest of the app. Its menu,
-workspace, dates, save states, dialogs and text controls use native i18next resources
-for all 14 supported languages. User notes remain unchanged.
+Ideas now supports pages at the workspace root, directly inside a folder, or in
+optional nested folders. New idea opens a blank page immediately, without a folder
+or naming prerequisite. Existing sections and notes keep their original data.
 
-Folders and sections have thin colored accents. The Text menu adds fonts, size,
-bold, italic, underline, strike, highlight, text color, clear formatting and undo/redo.
-Structured text runs persist in existing native PostgreSQL note records. No extra
-service or schema migration is required.
+The native desktop view defaults to a page list and editor, with optional collapsible
+organization. Mobile uses a list and Back instead of permanent hierarchy tabs.
+Adds global title/content search, previews, location labels, sorting, shared pins,
+Move and native drag/drop, automatic first-line titles and browser preferences for
+resuming work. The same native session, workspace, theme, language and shell remain.
 
 ## Validation
 
-- Eight regression tests passed; the complete native frontend/backend build and
-  route type checking passed on the VPS and in GitHub Actions.
-- Browser tests selected all 14 languages through the real language modal. Menu,
-  columns and Text labels changed without reloading or replacing the editor.
-- Calendar ↔ Ideas preserved the same document, header and sidebar.
-- Size changes preserved font/emphasis/highlight; undo/redo, autosave and reopening
-  retained formatting. Task insertion at the caret preserved the surrounding text.
-- Desktop and mobile at 360/390px, native light/dark themes and dropdown bounds
-  were visually inspected. Screenshots contain disposable demonstration content.
-- Native API validation rejected unsupported fonts, CSS URL values and mismatched
-  formatted text. Existing native authorization/workspace boundaries remain in use.
-- Protected database archives and their hashes were verified; native backups include
-  the Ideas table and data. This is not a claim of a full off-server restore drill.
-- Disposable accounts and test notes were removed after testing.
+- Twelve regression tests and complete native frontend/backend builds passed.
+- Private API checks covered root/direct/nested/legacy pages, content search, literal
+  wildcard handling, workspace isolation, team sharing, CSRF, revisions, pins,
+  self/descendant/concurrent cycle rejection, moves and trash/restoration.
+- Browser tests verified quick capture, automatic/manual titles, optional folders,
+  movement, search outside the current folder, sorting, pins and restored preferences.
+- All 14 language choices updated native controls without replacing the editor or
+  changing author text. Calendar ↔ Ideas retained the document, sidebar and header.
+- Exact replacement text and line breaks survived successful and simulated-failed
+  metadata operations, autosave and reopening. No unhandled promise rejections.
+- Fresh-page native pointer drags moved pages and folders without injected handlers.
+- Desktop, tablet, 360/390px layouts and both themes were inspected. A reduced visual
+  viewport kept the editor and all formatting actions within the keyboard-visible
+  area. Responsive title tests verified complete lines after width/panel changes
+  and portrait/landscape transitions. Tests used browser emulation, not physical phones.
+- The additive database migration only adds a pinned boolean. Transactional
+  before/after hashes confirmed existing rows' original fields were unchanged.
+- Protected database archives, source snapshots and hashes were verified. This is
+  not a claim of a complete off-server restore drill.
+- Screenshots use disposable demonstration notes. Test accounts and records were removed.
 
-[Changes and checks](https://github.com/drdrey7/postqube/pull/4) ·
-[Native build check](https://github.com/drdrey7/postqube/actions/runs/41274578981) ·
-[Ideas guide](IDEAS.md) · [Release metadata](https://github.com/drdrey7/postqube/blob/postqube-0.4.0-beta.1/postqube/release.json)
+[Ideas guide](IDEAS.md) ·
+[Feature changes](https://github.com/drdrey7/postqube/pull/5) ·
+[Responsive title follow-up](https://github.com/drdrey7/postqube/pull/6) ·
+[Release metadata](https://github.com/drdrey7/postqube/blob/postqube-0.5.0-beta.1/postqube/release.json)

@@ -7,5 +7,7 @@
   "runtimeBaseImage": "ghcr.io/gitroomhq/postiz-app:v2.25.3",
   "distribution": "native-postqube-build",
   "status": "beta",
-  "runtimeBaseDigest": "ghcr.io/gitroomhq/postiz-app@sha256:1e376ff2cb781022d528f171719cf174cf693a985a30cb40eefb13eae3ddda13"
+  "runtimeBaseDigest": "ghcr.io/gitroomhq/postiz-app@sha256:1e376ff2cb781022d528f171719cf174cf693a985a30cb40eefb13eae3ddda13",
+  "runtimeImageId": "sha256:1bacf6cc54eb29dc2889ea16b1dda520bba01460766b53a3bbb1eae1f009c5aa",
+  "applicationSourceCommit": "2bf88b2844bbba1a3bda730d0a5b6dd97dcb26d0"
 }
