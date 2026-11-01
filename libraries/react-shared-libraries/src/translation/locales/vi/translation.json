@@ -1052,6 +1052,12 @@
     "invalid_location": "Vị trí này không còn khả dụng.",
     "folder_cycle": "Không thể chuyển thư mục vào chính nó hoặc thư mục con của nó.",
     "not_found": "Mục này không còn khả dụng trong không gian làm việc.",
-    "invalid_search": "Tìm kiếm có thể chứa tối đa 200 ký tự."
+    "invalid_search": "Tìm kiếm có thể chứa tối đa 200 ký tự.",
+    "page_count_one": "{{count}} trang",
+    "page_count_other": "{{count}} trang",
+    "page_count_zero": "{{count}} trang",
+    "word_count_one": "{{count}} từ",
+    "word_count_other": "{{count}} từ",
+    "word_count_zero": "{{count}} từ"
   }
 }

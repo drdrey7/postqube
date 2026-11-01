@@ -1052,6 +1052,12 @@
     "invalid_location": "Esta localização já não está disponível.",
     "folder_cycle": "Uma pasta não pode ser movida para si própria nem para uma das suas subpastas.",
     "not_found": "Este elemento já não está disponível neste espaço de trabalho.",
-    "invalid_search": "A pesquisa pode ter até 200 caracteres."
+    "invalid_search": "A pesquisa pode ter até 200 caracteres.",
+    "page_count_one": "{{count}} página",
+    "page_count_other": "{{count}} páginas",
+    "page_count_zero": "{{count}} páginas",
+    "word_count_one": "{{count}} palavra",
+    "word_count_other": "{{count}} palavras",
+    "word_count_zero": "{{count}} palavras"
   }
 }

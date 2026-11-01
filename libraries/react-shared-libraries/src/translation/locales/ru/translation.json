@@ -1052,6 +1052,12 @@
     "invalid_location": "Это расположение больше недоступно.",
     "folder_cycle": "Нельзя переместить папку в неё саму или в одну из её подпапок.",
     "not_found": "Этот элемент больше недоступен в рабочем пространстве.",
-    "invalid_search": "Поисковый запрос может содержать до 200 символов."
+    "invalid_search": "Поисковый запрос может содержать до 200 символов.",
+    "page_count_one": "Страниц: {{count}}",
+    "page_count_other": "Страниц: {{count}}",
+    "page_count_zero": "Страниц: {{count}}",
+    "word_count_one": "Слов: {{count}}",
+    "word_count_other": "Слов: {{count}}",
+    "word_count_zero": "Слов: {{count}}"
   }
 }

@@ -1052,6 +1052,12 @@
     "invalid_location": "Questa posizione non è più disponibile.",
     "folder_cycle": "Una cartella non può essere spostata in sé stessa o in una sua sottocartella.",
     "not_found": "Questo elemento non è più disponibile in questo spazio di lavoro.",
-    "invalid_search": "La ricerca può contenere fino a 200 caratteri."
+    "invalid_search": "La ricerca può contenere fino a 200 caratteri.",
+    "page_count_one": "{{count}} pagina",
+    "page_count_other": "{{count}} pagine",
+    "page_count_zero": "{{count}} pagine",
+    "word_count_one": "{{count}} parola",
+    "word_count_other": "{{count}} parole",
+    "word_count_zero": "{{count}} parole"
   }
 }

@@ -1052,6 +1052,12 @@
     "invalid_location": "Esta ubicación ya no está disponible.",
     "folder_cycle": "Una carpeta no se puede mover dentro de sí misma ni de sus subcarpetas.",
     "not_found": "Este elemento ya no está disponible en este espacio de trabajo.",
-    "invalid_search": "La búsqueda admite hasta 200 caracteres."
+    "invalid_search": "La búsqueda admite hasta 200 caracteres.",
+    "page_count_one": "{{count}} página",
+    "page_count_other": "{{count}} páginas",
+    "page_count_zero": "{{count}} páginas",
+    "word_count_one": "{{count}} palabra",
+    "word_count_other": "{{count}} palabras",
+    "word_count_zero": "{{count}} palabras"
   }
 }

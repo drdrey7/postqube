@@ -1052,6 +1052,12 @@
     "invalid_location": "This location is no longer available.",
     "folder_cycle": "A folder cannot be moved into itself or one of its subfolders.",
     "not_found": "This item is no longer available in this workspace.",
-    "invalid_search": "Search can contain up to 200 characters."
+    "invalid_search": "Search can contain up to 200 characters.",
+    "page_count_one": "{{count}} page",
+    "page_count_other": "{{count}} pages",
+    "page_count_zero": "{{count}} pages",
+    "word_count_one": "{{count}} word",
+    "word_count_other": "{{count}} words",
+    "word_count_zero": "{{count}} words"
   }
 }

@@ -1052,6 +1052,12 @@
     "invalid_location": "Cet emplacement n’est plus disponible.",
     "folder_cycle": "Un dossier ne peut pas être déplacé dans lui-même ou dans un de ses sous-dossiers.",
     "not_found": "Cet élément n’est plus disponible dans cet espace de travail.",
-    "invalid_search": "La recherche est limitée à 200 caractères."
+    "invalid_search": "La recherche est limitée à 200 caractères.",
+    "page_count_one": "{{count}} page",
+    "page_count_other": "{{count}} pages",
+    "page_count_zero": "{{count}} pages",
+    "word_count_one": "{{count}} mot",
+    "word_count_other": "{{count}} mots",
+    "word_count_zero": "{{count}} mots"
   }
 }

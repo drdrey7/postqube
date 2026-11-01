@@ -1052,6 +1052,12 @@
     "invalid_location": "この場所は利用できなくなりました。",
     "folder_cycle": "フォルダーを自身または配下のフォルダーに移動することはできません。",
     "not_found": "この項目はこのワークスペースでは利用できなくなりました。",
-    "invalid_search": "検索は200文字以内で入力してください。"
+    "invalid_search": "検索は200文字以内で入力してください。",
+    "page_count_one": "{{count}}ページ",
+    "page_count_other": "{{count}}ページ",
+    "page_count_zero": "{{count}}ページ",
+    "word_count_one": "{{count}}語",
+    "word_count_other": "{{count}}語",
+    "word_count_zero": "{{count}}語"
   }
 }

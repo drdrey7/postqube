@@ -1052,6 +1052,12 @@
     "invalid_location": "لم يعد هذا الموقع متاحًا.",
     "folder_cycle": "لا يمكن نقل مجلد إلى نفسه أو إلى أحد مجلداته الفرعية.",
     "not_found": "لم يعد هذا العنصر متاحًا في مساحة العمل.",
-    "invalid_search": "يمكن أن يحتوي البحث على 200 حرف كحد أقصى."
+    "invalid_search": "يمكن أن يحتوي البحث على 200 حرف كحد أقصى.",
+    "page_count_one": "عدد الصفحات: {{count}}",
+    "page_count_other": "عدد الصفحات: {{count}}",
+    "page_count_zero": "عدد الصفحات: {{count}}",
+    "word_count_one": "عدد الكلمات: {{count}}",
+    "word_count_other": "عدد الكلمات: {{count}}",
+    "word_count_zero": "عدد الكلمات: {{count}}"
   }
 }

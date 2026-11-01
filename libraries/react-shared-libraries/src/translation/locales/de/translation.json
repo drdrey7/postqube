@@ -1052,6 +1052,12 @@
     "invalid_location": "Dieser Speicherort ist nicht mehr verfügbar.",
     "folder_cycle": "Ein Ordner kann nicht in sich selbst oder einen seiner Unterordner verschoben werden.",
     "not_found": "Dieses Element ist in diesem Arbeitsbereich nicht mehr verfügbar.",
-    "invalid_search": "Die Suche darf bis zu 200 Zeichen enthalten."
+    "invalid_search": "Die Suche darf bis zu 200 Zeichen enthalten.",
+    "page_count_one": "{{count}} Seite",
+    "page_count_other": "{{count}} Seiten",
+    "page_count_zero": "{{count}} Seiten",
+    "word_count_one": "{{count}} Wort",
+    "word_count_other": "{{count}} Wörter",
+    "word_count_zero": "{{count}} Wörter"
   }
 }

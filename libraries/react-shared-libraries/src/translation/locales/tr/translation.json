@@ -1052,6 +1052,12 @@
     "invalid_location": "Bu konum artık kullanılamıyor.",
     "folder_cycle": "Bir klasör kendisine veya kendi alt klasörlerinden birine taşınamaz.",
     "not_found": "Bu öğe artık bu çalışma alanında kullanılamıyor.",
-    "invalid_search": "Arama en fazla 200 karakter içerebilir."
+    "invalid_search": "Arama en fazla 200 karakter içerebilir.",
+    "page_count_one": "{{count}} sayfa",
+    "page_count_other": "{{count}} sayfa",
+    "page_count_zero": "{{count}} sayfa",
+    "word_count_one": "{{count}} kelime",
+    "word_count_other": "{{count}} kelime",
+    "word_count_zero": "{{count}} kelime"
   }
 }

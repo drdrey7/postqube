@@ -1052,6 +1052,12 @@
     "invalid_location": "이 위치는 더 이상 사용할 수 없습니다.",
     "folder_cycle": "폴더를 자신이나 자신의 하위 폴더로 이동할 수 없습니다.",
     "not_found": "이 항목은 이 워크스페이스에서 더 이상 사용할 수 없습니다.",
-    "invalid_search": "검색어는 200자까지 입력할 수 있습니다."
+    "invalid_search": "검색어는 200자까지 입력할 수 있습니다.",
+    "page_count_one": "{{count}}페이지",
+    "page_count_other": "{{count}}페이지",
+    "page_count_zero": "{{count}}페이지",
+    "word_count_one": "{{count}}단어",
+    "word_count_other": "{{count}}단어",
+    "word_count_zero": "{{count}}단어"
   }
 }

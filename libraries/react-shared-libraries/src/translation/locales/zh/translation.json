@@ -1052,6 +1052,12 @@
     "invalid_location": "此位置已不可用。",
     "folder_cycle": "不能将文件夹移入自身或其子文件夹。",
     "not_found": "此项目在工作区中已不可用。",
-    "invalid_search": "搜索内容最多可包含200个字符。"
+    "invalid_search": "搜索内容最多可包含200个字符。",
+    "page_count_one": "{{count}}个页面",
+    "page_count_other": "{{count}}个页面",
+    "page_count_zero": "{{count}}个页面",
+    "word_count_one": "{{count}}个词",
+    "word_count_other": "{{count}}个词",
+    "word_count_zero": "{{count}}个词"
   }
 }

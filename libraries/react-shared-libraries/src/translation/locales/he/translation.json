@@ -1052,6 +1052,12 @@
     "invalid_location": "המיקום הזה אינו זמין עוד.",
     "folder_cycle": "לא ניתן להעביר תיקייה לתוך עצמה או לתיקיית משנה שלה.",
     "not_found": "הפריט הזה אינו זמין עוד בסביבת העבודה.",
-    "invalid_search": "החיפוש יכול לכלול עד 200 תווים."
+    "invalid_search": "החיפוש יכול לכלול עד 200 תווים.",
+    "page_count_one": "{{count}} עמוד",
+    "page_count_other": "{{count}} עמודים",
+    "page_count_zero": "{{count}} עמודים",
+    "word_count_one": "{{count}} מילה",
+    "word_count_other": "{{count}} מילים",
+    "word_count_zero": "{{count}} מילים"
   }
 }
