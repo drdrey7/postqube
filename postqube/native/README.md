@@ -11,6 +11,12 @@ Notes belong to Organization in PostgreSQL through the Prisma IdeaItem model.
 The composite parent foreign key prevents cross-workspace parent references.
 Native database backups include these notes automatically.
 
+The editor stores allowlisted rich-text runs in the existing blocks JSON; no new
+table or migration is needed for formatting. API validation and rendering share
+`libraries/helpers/src/ideas/text-format.ts`. UI translations are part of the
+standard `libraries/react-shared-libraries/src/translation/locales` resources.
+CI checks every supported locale and formatting/task serialization regressions.
+
 ## Build
 
 Use the public repository checkout as the context, with a credential-free

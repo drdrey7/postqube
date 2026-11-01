@@ -5,16 +5,19 @@ WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY libraries/nestjs-libraries/src/database/prisma/schema.prisma libraries/nestjs-libraries/src/database/prisma/schema.prisma
 RUN pnpm exec prisma generate --schema libraries/nestjs-libraries/src/database/prisma/schema.prisma
+COPY libraries/helpers/src/ideas libraries/helpers/src/ideas
 COPY apps/backend/src/api/api.module.ts apps/backend/src/api/api.module.ts
 COPY apps/backend/src/api/routes/ideas.controller.ts apps/backend/src/api/routes/ideas.controller.ts
 COPY apps/backend/src/main.ts apps/backend/src/main.ts
 RUN NODE_OPTIONS=--max-old-space-size=4096 pnpm --filter postiz-backend build
 FROM native-backend AS native-test
+COPY libraries/react-shared-libraries/src/translation/locales libraries/react-shared-libraries/src/translation/locales
 COPY apps/frontend/src/components/ideas apps/frontend/src/components/ideas
 COPY postqube/native/test postqube/native/test
 RUN pnpm exec jest --config postqube/native/test/jest.config.cjs --runInBand
 
 FROM native-backend AS dist
+COPY libraries/react-shared-libraries/src/translation/locales libraries/react-shared-libraries/src/translation/locales
 COPY apps/frontend/src/components/ideas apps/frontend/src/components/ideas
 COPY apps/frontend/src/components/layout/top.menu.tsx apps/frontend/src/components/layout/top.menu.tsx
 COPY apps/frontend/src/components/new-layout/layout.component.tsx apps/frontend/src/components/new-layout/layout.component.tsx
