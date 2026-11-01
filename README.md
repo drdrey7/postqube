@@ -37,6 +37,7 @@ operations files are easy to find. See [provenance and changes](UPSTREAM.md).
 
 ## Start here
 
+- **Current release:** [0.5 beta validation](docs/postqube/RELEASE-BETA.md)
 - **Organize ideas:** [Ideas workspace](docs/postqube/IDEAS.md)
 - **Use it:** [Getting started](docs/postqube/GETTING-STARTED.md) · [User guide](docs/postqube/USER-GUIDE.md)
 - **Operate it:** [Deployment](docs/postqube/DEPLOYMENT.md) · [Backups and recovery](docs/postqube/OPERATIONS.md)
